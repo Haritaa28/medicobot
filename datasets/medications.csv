@@ -1,0 +1,9 @@
+medication,purpose,dose,administration,type
+Paracetamol,Pain reliever and fever reducer,500mg,Oral,Over-the-counter
+Ibuprofen,Anti-inflammatory pain reliever,400mg,Oral,Over-the-counter
+Amoxicillin,Antibiotic for bacterial infections,500mg,Oral,Prescription
+Lisinopril,Blood pressure medication,10mg,Oral,Prescription
+Metformin,Diabetes medication,500mg,Oral,Prescription
+Salbutamol,Asthma inhaler,100mcg,Inhalation,Prescription
+Omeprazole,Acid reflux medication,20mg,Oral,Over-the-counter
+Cetirizine,Antihistamine for allergies,10mg,Oral,Over-the-counter

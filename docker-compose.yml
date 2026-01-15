@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./instances:/app/instances
+      - ./static/uploads:/app/static/uploads
+      - ./datasets:/app/datasets
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - SECRET_KEY=your-production-secret-key-change-this
+      - DATABASE_URL=sqlite:///instances/medicobot.db
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OFFLINE_MODE=${OFFLINE_MODE:-False}
+    restart: unless-stopped

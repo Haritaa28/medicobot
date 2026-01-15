@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat - MediCoBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #chatBox {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .user-msg {
+            background: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 15px;
+            margin: 5px;
+            max-width: 70%;
+            float: right;
+            clear: both;
+        }
+        .bot-msg {
+            background: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 15px;
+            margin: 5px;
+            max-width: 70%;
+            float: left;
+            clear: both;
+        }
+        .voice-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .voice-btn.recording {
+            background-color: #dc3545 !important;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .voice-status {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">MediCoBot</a>
+            <a class="nav-link text-white" href="/">Home</a>
+            <a class="nav-link text-white" href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2><i class="fas fa-comment-medical"></i> MediCoBot Chat</h2>
+
+        <div id="chatBox">
+            <div class="bot-msg">Hello! I'm MediCoBot. How can I help you with medical questions today? <br><small>You can type or use voice input.</small></div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="messageInput" placeholder="Type your message or use voice...">
+            <button class="btn btn-primary" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i> Send
+            </button>
+        </div>
+
+        <!-- Voice Recording Section -->
+        <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+                <i class="fas fa-microphone"></i> Voice Input
+            </div>
+            <div class="card-body text-center">
+                <div class="voice-btn btn btn-success mx-auto mb-2" id="voiceBtn" onclick="toggleRecording()">
+                    <i class="fas fa-microphone fa-2x"></i>
+                </div>
+                <div class="voice-status" id="voiceStatus">
+                    Click microphone to start recording
+                </div>
+                <div class="mt-2" id="recordingTimer" style="display: none;">
+                    <i class="fas fa-stopwatch"></i> Recording: <span id="timer">0</span>s
+                </div>
+
+                <!-- Audio Preview -->
+                <audio id="audioPreview" controls class="mt-3" style="display: none;"></audio>
+            </div>
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="card mb-3">
+            <div class="card-header bg-warning text-dark">
+                <i class="fas fa-image"></i> Image Analysis
+            </div>
+            <div class="card-body">
+                <form id="imageForm" enctype="multipart/form-data">
+                    <div class="mb-2">
+                        <label class="form-label">Upload medical image for analysis:</label>
+                        <input type="file" class="form-control" id="imageInput" accept="image/*">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Optional message with image:</label>
+                        <input type="text" class="form-control" id="imageMessage" placeholder="Describe your concern...">
+                    </div>
+                    <button type="button" class="btn btn-info" onclick="uploadImage()">
+                        <i class="fas fa-upload"></i> Upload & Analyze
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <a href="/" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+
+    <script>
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Send to server
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message})
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessage(data.response, 'bot');
+            })
+            .catch(error => {
+                addMessage('Error: Could not connect to server', 'bot');
+            });
+        }
+
+        function addMessage(text, sender) {
+            const chatBox = document.getElementById('chatBox');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = sender + '-msg';
+            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Enter key support
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Image upload
+        function uploadImage() {
+            const fileInput = document.getElementById('imageInput');
+            const messageInput = document.getElementById('imageMessage');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select an image file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+            if (messageInput.value.trim()) {
+                formData.append('message', messageInput.value.trim());
+            }
+
+            const userMsg = `[Uploading image: ${file.name}${messageInput.value.trim() ? ' - ' + messageInput.value.trim() : ''}]`;
+            addMessage(userMsg, 'user');
+
+            fetch('/api/analyze-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addMessage(data.response, 'bot');
+                } else {
+                    addMessage('Error: ' + data.error, 'bot');
+                }
+            })
+            .catch(error => {
+                addMessage('Error uploading image', 'bot');
+            });
+
+            // Clear inputs
+            fileInput.value = '';
+            messageInput.value = '';
+        }
+
+        // Voice Recording
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let timerInterval = null;
+        let seconds = 0;
+
+        function toggleRecording() {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        function startRecording() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Voice recording not supported in your browser. Please use Chrome, Firefox, or Edge.');
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    isRecording = true;
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audio = document.getElementById('audioPreview');
+                        audio.src = audioUrl;
+                        audio.style.display = 'block';
+
+                        // Send to server
+                        sendVoiceToServer(audioBlob);
+                    };
+
+                    mediaRecorder.start();
+
+                    // Update UI
+                    document.getElementById('voiceBtn').classList.add('recording');
+                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-stop fa-2x"></i>';
+                    document.getElementById('voiceStatus').textContent = 'Recording... Speak now';
+                    document.getElementById('recordingTimer').style.display = 'block';
+
+                    // Start timer
+                    seconds = 0;
+                    document.getElementById('timer').textContent = seconds;
+                    timerInterval = setInterval(() => {
+                        seconds++;
+                        document.getElementById('timer').textContent = seconds;
+                        if (seconds >= 30) { // Auto-stop after 30 seconds
+                            stopRecording();
+                        }
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.error('Error accessing microphone:', err);
+                    alert('Could not access microphone. Please check permissions.');
+                });
+        }
+
+        function stopRecording() {
+            if (!isRecording) return;
+
+            isRecording = false;
+
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+
+            // Update UI
+            document.getElementById('voiceBtn').classList.remove('recording');
+            document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-microphone fa-2x"></i>';
+            document.getElementById('voiceStatus').textContent = 'Processing voice...';
+            document.getElementById('recordingTimer').style.display = 'none';
+
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function sendVoiceToServer(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'voice_message.wav');
+
+            fetch('/api/process-voice', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('voiceStatus').textContent = 'Voice processed!';
+
+                    // Add transcribed text to chat input
+                    if (data.text) {
+                        document.getElementById('messageInput').value = data.text;
+                        addMessage(`[Voice]: ${data.text}`, 'user');
+
+                        // Auto-send after voice input
+                        setTimeout(() => {
+                            sendMessage();
+                        }, 500);
+                    }
+                } else {
+                    document.getElementById('voiceStatus').textContent = 'Voice processing failed';
+                    addMessage('Voice processing failed: ' + (data.error || 'Unknown error'), 'bot');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending voice:', error);
+                document.getElementById('voiceStatus').textContent = 'Failed to send voice';
+                addMessage('Failed to process voice. Please try again.', 'bot');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Welcome message
+            setTimeout(() => {
+                addMessage("You can ask me about symptoms, medications, or general health advice. Try saying: 'I have a fever' or 'What should I do for headache?'", 'bot');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

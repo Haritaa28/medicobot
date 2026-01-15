@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MedicoBot - AI Health Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="{{ url_for('index') }}">
+                    <i class="fas fa-robot"></i>
+                    <span>MedicoBot</span>
+                </a>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="{{ url_for('index') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-comment-medical"></i> Chat</a>
+                    <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                    {% if current_user.username == 'admin' %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link"><i class="fas fa-cog"></i> Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="nav-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-link register"><i class="fas fa-user-plus"></i> Register</a>
+                {% endif %}
+
+                <!-- Language Selector -->
+                <div class="language-selector">
+                    <select id="languageSelect" onchange="changeLanguage(this.value)">
+                        <option value="en" {% if session.get('language', 'en') == 'en' %}selected{% endif %}>🇺🇸 English</option>
+                        <option value="ta" {% if session.get('language', 'en') == 'ta' %}selected{% endif %}>🇮🇳 தமிழ்</option>
+                        <option value="hi" {% if session.get('language', 'en') == 'hi' %}selected{% endif %}>🇮🇳 हिंदी</option>
+                        <option value="fr" {% if session.get('language', 'en') == 'fr' %}selected{% endif %}>🇫🇷 Français</option>
+                        <option value="te" {% if session.get('language', 'en') == 'te' %}selected{% endif %}>🇮🇳 తెలుగు</option>
+                        <option value="ml" {% if session.get('language', 'en') == 'ml' %}selected{% endif %}>🇮🇳 മലയാളം</option>
+                        <option value="kn" {% if session.get('language', 'en') == 'kn' %}selected{% endif %}>🇮🇳 ಕನ್ನಡ</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                        <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-robot"></i> MedicoBot</h3>
+                <p>AI-powered multilingual health assistant for disease prediction and medical guidance.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('chat') if current_user.is_authenticated else url_for('login') }}">Chat Assistant</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> support@medicobot.com</p>
+                <p><i class="fas fa-phone"></i> +91 9876543210</p>
+            </div>
+            <div class="footer-section">
+                <h4>Disclaimer</h4>
+                <p class="disclaimer">This is an AI assistant for informational purposes only. Always consult a qualified healthcare professional for medical advice.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MedicoBot. All rights reserved.</p>
+            <div class="mode-toggle">
+                <span>Mode:</span>
+                <button id="modeToggle" class="mode-btn">Online</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        function changeLanguage(lang) {
+            fetch('/api/translate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    text: 'Changing language to ' + lang,
+                    target_lang: lang
+                })
+            }).then(() => {
+                window.location.href = '?lang=' + lang;
+            });
+        }
+
+        document.getElementById('modeToggle').addEventListener('click', function() {
+            const currentMode = this.textContent;
+            const newMode = currentMode === 'Online' ? 'Offline' : 'Online';
+
+            fetch('/toggle_mode', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({mode: newMode.toLowerCase()})
+            }).then(response => response.json())
+              .then(data => {
+                  this.textContent = newMode;
+                  alert('Switched to ' + newMode + ' mode');
+              });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('navToggle').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+    </script>
+</body>
+</html>

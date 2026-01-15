@@ -1,0 +1,30 @@
+[
+  {
+    "keywords": [
+      "hello",
+      "hi",
+      "hey"
+    ],
+    "answer_en": "Hello! How can I help you with medical questions today?",
+    "answer_hi": "नमस्ते! मैं आपकी मदद कैसे कर सकता हूं?",
+    "answer_ta": "வணக்கம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?"
+  },
+  {
+    "keywords": [
+      "fever",
+      "temperature"
+    ],
+    "answer_en": "For fever: Rest, drink plenty of fluids, and take paracetamol if needed. Consult doctor if fever persists beyond 3 days.",
+    "answer_hi": "बुखार के लिए: आराम करें, पर्याप्त तरल पदार्थ पिएं, और आवश्यकता पड़ने पर पैरासिटामोल लें। यदि बुखार 3 दिन से अधिक रहता है तो डॉक्टर से सलाह लें।",
+    "answer_ta": "காய்ச்சலுக்கு: ஓய்வெடுக்கவும், நிறைய திரவங்களை குடிக்கவும், தேவைப்பட்டால் பாராசிட்டமால் எடுத்துக் கொள்ளுங்கள். 3 நாட்களுக்கு மேல் காய்ச்சல் தொடர்ந்தால் மருத்துவரைக் கலந்தாலோசிக்கவும்."
+  },
+  {
+    "keywords": [
+      "headache",
+      "head pain"
+    ],
+    "answer_en": "For headache: Rest in a dark room, drink water, and consider over-the-counter pain relief. See a doctor if severe or persistent.",
+    "answer_hi": "सिरदर्द के लिए: अंधेरे कमरे में आराम करें, पानी पिएं, और ओवर-द-काउंटर दर्द निवारक पर विचार करें। यदि गंभीर या लगातार हो तो डॉक्टर से सलाह लें।",
+    "answer_ta": "தலைவலிக்கு: இருண்ட அறையில் ஓய்வெடுக்கவும், தண்ணீர் குடிக்கவும், மேலும் ஓவர்-தெ-கவுண்டர் வலி நிவாரணியைக் கவனியுங்கள். கடுமையான அல்லது தொடர்ச்சியான வலி இருந்தால் மருத்துவரைக் காணவும்."
+  }
+]

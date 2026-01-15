@@ -1,0 +1,32 @@
+name,category
+fever,fever
+headache,general
+body pain,general
+runny nose,respiratory
+sore throat,respiratory
+cough,respiratory
+sneezing,respiratory
+fatigue,general
+nausea,general
+vomiting,general
+diarrhea,digestive
+constipation,digestive
+abdominal pain,digestive
+chest pain,cardiac
+shortness of breath,respiratory
+dizziness,neurological
+blurred vision,neurological
+rash,skin
+itching,skin
+redness,skin
+swelling,skin
+joint pain,musculoskeletal
+back pain,musculoskeletal
+anxiety,mental
+depression,mental
+insomnia,mental
+loss of appetite,general
+weight loss,general
+weight gain,general
+excessive thirst,metabolic
+frequent urination,metabolic
