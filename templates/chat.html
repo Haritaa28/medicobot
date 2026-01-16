@@ -1,51 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - MediCoBot</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        #chatBox {
-            height: 400px;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .chat-box {
+            flex: 1;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .message {
             margin-bottom: 15px;
-            background: #f9f9f9;
-            border-radius: 5px;
+            max-width: 80%;
         }
-        .user-msg {
-            background: #007bff;
+        .user-message {
+            margin-left: auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 12px;
-            border-radius: 15px;
-            margin: 5px;
-            max-width: 70%;
-            float: right;
-            clear: both;
+            padding: 12px 18px;
+            border-radius: 18px 18px 5px 18px;
         }
-        .bot-msg {
-            background: #28a745;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 15px;
-            margin: 5px;
-            max-width: 70%;
-            float: left;
-            clear: both;
+        .bot-message {
+            background: #e9ecef;
+            color: #333;
+            padding: 12px 18px;
+            border-radius: 18px 18px 18px 5px;
+            border-left: 4px solid #667eea;
         }
-        .voice-btn {
+        .input-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #f0f0f0;
+        }
+        .btn-voice {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            border: none;
             width: 50px;
             height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white;
         }
-        .voice-btn.recording {
-            background-color: #dc3545 !important;
+        .btn-voice.recording {
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
@@ -53,87 +77,172 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        .voice-status {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
+        .feature-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        .feature-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        .medical-info {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navigation -->
+    <nav class="navbar navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="/">MediCoBot</a>
-            <a class="nav-link text-white" href="/">Home</a>
-            <a class="nav-link text-white" href="/logout">Logout</a>
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-heartbeat text-danger"></i> MediCoBot
+            </a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Profile</a>
+                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h2><i class="fas fa-comment-medical"></i> MediCoBot Chat</h2>
-
-        <div id="chatBox">
-            <div class="bot-msg">Hello! I'm MediCoBot. How can I help you with medical questions today? <br><small>You can type or use voice input.</small></div>
-        </div>
-
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" id="messageInput" placeholder="Type your message or use voice...">
-            <button class="btn btn-primary" onclick="sendMessage()">
-                <i class="fas fa-paper-plane"></i> Send
-            </button>
-        </div>
-
-        <!-- Voice Recording Section -->
-        <div class="card mb-3">
-            <div class="card-header bg-info text-white">
-                <i class="fas fa-microphone"></i> Voice Input
-            </div>
-            <div class="card-body text-center">
-                <div class="voice-btn btn btn-success mx-auto mb-2" id="voiceBtn" onclick="toggleRecording()">
-                    <i class="fas fa-microphone fa-2x"></i>
-                </div>
-                <div class="voice-status" id="voiceStatus">
-                    Click microphone to start recording
-                </div>
-                <div class="mt-2" id="recordingTimer" style="display: none;">
-                    <i class="fas fa-stopwatch"></i> Recording: <span id="timer">0</span>s
-                </div>
-
-                <!-- Audio Preview -->
-                <audio id="audioPreview" controls class="mt-3" style="display: none;"></audio>
-            </div>
-        </div>
-
-        <!-- Image Upload Section -->
-        <div class="card mb-3">
-            <div class="card-header bg-warning text-dark">
-                <i class="fas fa-image"></i> Image Analysis
-            </div>
-            <div class="card-body">
-                <form id="imageForm" enctype="multipart/form-data">
-                    <div class="mb-2">
-                        <label class="form-label">Upload medical image for analysis:</label>
-                        <input type="file" class="form-control" id="imageInput" accept="image/*">
+    <div class="container">
+        <div class="chat-container">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="fw-bold">
+                            <i class="fas fa-comment-medical text-primary"></i> MediCoBot Chat
+                        </h3>
+                        <p class="text-muted mb-0">Your AI medical assistant is ready to help</p>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Optional message with image:</label>
-                        <input type="text" class="form-control" id="imageMessage" placeholder="Describe your concern...">
+                    <div class="col-md-4 text-end">
+                        <div class="feature-btn d-inline-block" onclick="showMedicalInfo()">
+                            <i class="fas fa-info-circle"></i> Medical Info
+                        </div>
+                        <div class="feature-btn d-inline-block" onclick="showHistory()">
+                            <i class="fas fa-history"></i> History
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-info" onclick="uploadImage()">
-                        <i class="fas fa-upload"></i> Upload & Analyze
-                    </button>
-                </form>
+                </div>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="medical-info">
+                <h6><i class="fas fa-lightbulb"></i> Quick Tips:</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <small><i class="fas fa-check text-success"></i> Describe symptoms clearly</small>
+                    </div>
+                    <div class="col-md-6">
+                        <small><i class="fas fa-check text-success"></i> Mention duration & severity</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-box" id="chatBox">
+                <div class="message bot-message">
+                    <strong><i class="fas fa-robot"></i> MediCoBot:</strong><br>
+                    Hello! I'm your AI medical assistant. How can I help you today?
+                    <br><small class="text-muted">You can describe symptoms, ask medical questions, or upload images.</small>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="row align-items-center">
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="messageInput"
+                                   placeholder="Describe your symptoms or ask a question..."
+                                   onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button class="btn btn-outline-primary" type="button" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <button class="btn btn-voice" id="voiceBtn" onclick="toggleVoice()">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <small id="voiceStatus" class="d-block mt-1">Tap to speak</small>
+                    </div>
+                </div>
+
+                <!-- Additional Features -->
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="feature-btn" onclick="attachImage()">
+                            <i class="fas fa-image"></i> Upload Image
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-btn" onclick="showEmergencyInfo()">
+                            <i class="fas fa-ambulance"></i> Emergency Info
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-btn" onclick="clearChat()">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Input (Hidden) -->
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="uploadImage()">
             </div>
         </div>
-
-        <a href="/" class="btn btn-secondary">
-            <i class="fas fa-home"></i> Back to Home
-        </a>
     </div>
 
+    <!-- Bootstrap Modal for Image Preview -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Image Analysis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="previewImage" src="" class="img-fluid mb-3" style="max-height: 300px;">
+                    <div id="analysisResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Chat functionality
-        function sendMessage() {
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+
+            const senderName = sender === 'user' ?
+                '<strong><i class="fas fa-user"></i> You:</strong>' :
+                '<strong><i class="fas fa-robot"></i> MediCoBot:</strong>';
+
+            messageDiv.innerHTML = `${senderName}<br>${text}`;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Send message
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
 
@@ -144,207 +253,219 @@
             input.value = '';
 
             // Send to server
-            fetch('/api/chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: message})
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        is_voice: false
+                    })
+                });
+
+                const data = await response.json();
                 addMessage(data.response, 'bot');
-            })
-            .catch(error => {
-                addMessage('Error: Could not connect to server', 'bot');
-            });
+            } catch (error) {
+                addMessage('Error: Could not connect to server. Please try again.', 'bot');
+            }
         }
 
-        function addMessage(text, sender) {
-            const chatBox = document.getElementById('chatBox');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = sender + '-msg';
-            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        // Voice recording
+        function toggleVoice() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceStatus = document.getElementById('voiceStatus');
 
-        // Enter key support
-        document.getElementById('messageInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Image upload
-        function uploadImage() {
-            const fileInput = document.getElementById('imageInput');
-            const messageInput = document.getElementById('imageMessage');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert('Please select an image file');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('image', file);
-            if (messageInput.value.trim()) {
-                formData.append('message', messageInput.value.trim());
-            }
-
-            const userMsg = `[Uploading image: ${file.name}${messageInput.value.trim() ? ' - ' + messageInput.value.trim() : ''}]`;
-            addMessage(userMsg, 'user');
-
-            fetch('/api/analyze-image', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addMessage(data.response, 'bot');
-                } else {
-                    addMessage('Error: ' + data.error, 'bot');
-                }
-            })
-            .catch(error => {
-                addMessage('Error uploading image', 'bot');
-            });
-
-            // Clear inputs
-            fileInput.value = '';
-            messageInput.value = '';
-        }
-
-        // Voice Recording
-        let isRecording = false;
-        let mediaRecorder = null;
-        let audioChunks = [];
-        let timerInterval = null;
-        let seconds = 0;
-
-        function toggleRecording() {
             if (!isRecording) {
                 startRecording();
+                voiceBtn.classList.add('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                voiceStatus.textContent = 'Listening...';
             } else {
                 stopRecording();
+                voiceBtn.classList.remove('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceStatus.textContent = 'Tap to speak';
             }
         }
 
-        function startRecording() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                alert('Voice recording not supported in your browser. Please use Chrome, Firefox, or Edge.');
-                return;
-            }
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
 
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    isRecording = true;
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
 
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
 
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        const audio = document.getElementById('audioPreview');
-                        audio.src = audioUrl;
-                        audio.style.display = 'block';
+                    // Send voice to server
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'voice.wav');
 
-                        // Send to server
-                        sendVoiceToServer(audioBlob);
-                    };
+                    try {
+                        const response = await fetch('/api/voice', {
+                            method: 'POST',
+                            body: formData
+                        });
 
-                    mediaRecorder.start();
-
-                    // Update UI
-                    document.getElementById('voiceBtn').classList.add('recording');
-                    document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-stop fa-2x"></i>';
-                    document.getElementById('voiceStatus').textContent = 'Recording... Speak now';
-                    document.getElementById('recordingTimer').style.display = 'block';
-
-                    // Start timer
-                    seconds = 0;
-                    document.getElementById('timer').textContent = seconds;
-                    timerInterval = setInterval(() => {
-                        seconds++;
-                        document.getElementById('timer').textContent = seconds;
-                        if (seconds >= 30) { // Auto-stop after 30 seconds
-                            stopRecording();
+                        const data = await response.json();
+                        if (data.success) {
+                            addMessage('[Voice Message]', 'user');
+                            document.getElementById('messageInput').value = data.text;
+                            setTimeout(sendMessage, 500);
                         }
-                    }, 1000);
-                })
-                .catch(err => {
-                    console.error('Error accessing microphone:', err);
-                    alert('Could not access microphone. Please check permissions.');
-                });
+                    } catch (error) {
+                        addMessage('Voice processing failed. Please type your message.', 'bot');
+                    }
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+
+                // Auto-stop after 30 seconds
+                setTimeout(() => {
+                    if (isRecording) {
+                        stopRecording();
+                    }
+                }, 30000);
+
+            } catch (error) {
+                alert('Microphone access denied. Please allow microphone access.');
+                console.error('Microphone error:', error);
+            }
         }
 
         function stopRecording() {
-            if (!isRecording) return;
-
-            isRecording = false;
-
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            if (mediaRecorder && isRecording) {
                 mediaRecorder.stop();
+                isRecording = false;
+
+                // Stop all tracks
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
-            }
-
-            // Update UI
-            document.getElementById('voiceBtn').classList.remove('recording');
-            document.getElementById('voiceBtn').innerHTML = '<i class="fas fa-microphone fa-2x"></i>';
-            document.getElementById('voiceStatus').textContent = 'Processing voice...';
-            document.getElementById('recordingTimer').style.display = 'none';
-
-            // Stop timer
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
             }
         }
 
-        function sendVoiceToServer(audioBlob) {
+        // Image handling
+        function attachImage() {
+            document.getElementById('imageUpload').click();
+        }
+
+        async function uploadImage() {
+            const fileInput = document.getElementById('imageUpload');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            // Preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                document.getElementById('previewImage').src = e.target.result;
+                document.getElementById('analysisResult').innerHTML =
+                    '<div class="spinner-border text-primary" role="status"></div>' +
+                    '<p class="mt-2">Analyzing image...</p>';
+                modal.show();
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to server
             const formData = new FormData();
-            formData.append('audio', audioBlob, 'voice_message.wav');
+            formData.append('image', file);
 
-            fetch('/api/process-voice', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                const response = await fetch('/api/analyze-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
                 if (data.success) {
-                    document.getElementById('voiceStatus').textContent = 'Voice processed!';
+                    addMessage(`[Image Uploaded: ${data.filename}]`, 'user');
+                    addMessage(data.analysis, 'bot');
 
-                    // Add transcribed text to chat input
-                    if (data.text) {
-                        document.getElementById('messageInput').value = data.text;
-                        addMessage(`[Voice]: ${data.text}`, 'user');
-
-                        // Auto-send after voice input
-                        setTimeout(() => {
-                            sendMessage();
-                        }, 500);
-                    }
+                    document.getElementById('analysisResult').innerHTML =
+                        `<div class="alert alert-success">${data.analysis.replace(/\n/g, '<br>')}</div>`;
                 } else {
-                    document.getElementById('voiceStatus').textContent = 'Voice processing failed';
-                    addMessage('Voice processing failed: ' + (data.error || 'Unknown error'), 'bot');
+                    throw new Error(data.error);
                 }
-            })
-            .catch(error => {
-                console.error('Error sending voice:', error);
-                document.getElementById('voiceStatus').textContent = 'Failed to send voice';
-                addMessage('Failed to process voice. Please try again.', 'bot');
-            });
+            } catch (error) {
+                addMessage('Image upload failed. Please try again.', 'bot');
+                document.getElementById('analysisResult').innerHTML =
+                    `<div class="alert alert-danger">Upload failed: ${error.message}</div>`;
+            }
+
+            fileInput.value = '';
+        }
+
+        // Utility functions
+        function showMedicalInfo() {
+            addMessage(
+                '<strong>Important Medical Information:</strong><br>' +
+                '1. This is an AI assistant for preliminary guidance only<br>' +
+                '2. Always consult a healthcare professional for diagnosis<br>' +
+                '3. For emergencies, call emergency services immediately<br>' +
+                '4. Keep your medical information updated in profile',
+                'bot'
+            );
+        }
+
+        function showEmergencyInfo() {
+            addMessage(
+                '<strong>Emergency Contacts:</strong><br>' +
+                '📞 National Emergency: 112<br>' +
+                '🚑 Ambulance: 102<br>' +
+                '👨‍⚕️ Poison Control: 1800-116-117<br><br>' +
+                '<strong>Emergency Symptoms:</strong><br>' +
+                '• Chest pain<br>• Difficulty breathing<br>• Severe bleeding<br>• Loss of consciousness',
+                'bot'
+            );
+        }
+
+        async function showHistory() {
+            try {
+                const response = await fetch('/api/chat-history');
+                const data = await response.json();
+
+                if (data.chats.length > 0) {
+                    let history = '<strong>Recent Conversations:</strong><br><br>';
+                    data.chats.slice(0, 5).forEach(chat => {
+                        history += `<small>${chat.date}: ${chat.message.substring(0, 50)}...</small><br>`;
+                    });
+                    addMessage(history, 'bot');
+                } else {
+                    addMessage('No chat history found.', 'bot');
+                }
+            } catch (error) {
+                addMessage('Could not load chat history.', 'bot');
+            }
+        }
+
+        function clearChat() {
+            if (confirm('Clear all chat messages?')) {
+                document.getElementById('chatBox').innerHTML =
+                    '<div class="message bot-message">' +
+                    '<strong><i class="fas fa-robot"></i> MediCoBot:</strong><br>' +
+                    'Chat cleared. How can I help you today?</div>';
+            }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Welcome message
+            // Welcome message after 1 second
             setTimeout(() => {
-                addMessage("You can ask me about symptoms, medications, or general health advice. Try saying: 'I have a fever' or 'What should I do for headache?'", 'bot');
+                addMessage(
+                    'Try asking:<br>' +
+                    '• "I have fever and headache"<br>' +
+                    '• "What should I do for cough?"<br>' +
+                    '• "Upload image for analysis"',
+                    'bot'
+                );
             }, 1000);
         });
     </script>

@@ -1,101 +1,186 @@
 import google.generativeai as genai
 import os
+import json
 from dotenv import load_dotenv
-from PIL import Image
-import io
 
+# Load environment variables
 load_dotenv()
 
+# Configure Gemini API
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
-class GeminiHelper:
-    def __init__(self):
-        self.api_key = os.getenv('GEMINI_API_KEY')
-        if self.api_key:
-            genai.configure(api_key=self.api_key)
-            self.model_text = genai.GenerativeModel('gemini-pro')
-            self.model_vision = genai.GenerativeModel('gemini-pro-vision')
-        else:
-            self.model_text = None
-            self.model_vision = None
 
-    def generate_text_response(self, prompt, context=""):
-        """Generate text response using Gemini"""
-        if not self.model_text:
-            return "AI service is not configured. Please check your API key."
+def setup_gemini():
+    """Setup Gemini AI with API key"""
+    if not GEMINI_API_KEY:
+        print("⚠️ Gemini API key not found. Using offline mode.")
+        return None
 
-        try:
-            full_prompt = f"""As a medical assistant, please respond to the following query.
-            Context: {context}
-            Query: {prompt}
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
 
-            Guidelines:
-            1. Provide accurate medical information
-            2. Always recommend consulting a doctor for serious conditions
-            3. Be empathetic and clear
-            4. Do not provide definitive diagnoses
-            5. Suggest preventive measures
-
-            Response:"""
-
-            response = self.model_text.generate_content(full_prompt)
-            return response.text
-        except Exception as e:
-            return f"Error generating response: {str(e)}"
-
-    def analyze_image(self, image_path, query=""):
-        """Analyze medical image using Gemini Vision"""
-        if not self.model_vision:
-            return "Image analysis is not available in offline mode."
-
-        try:
-            # Open and prepare image
-            img = Image.open(image_path)
-
-            if query:
-                prompt = f"""Analyze this medical image. Query: {query}
-
-                Please provide:
-                1. Observations about the image
-                2. Possible conditions (with disclaimers)
-                3. Recommendations for next steps
-                4. Reminder to consult a doctor"""
-            else:
-                prompt = """Analyze this medical image for potential health conditions.
-                Provide observations and recommendations, but remind to consult a doctor."""
-
-            response = self.model_vision.generate_content([prompt, img])
-            return response.text
-        except Exception as e:
-            return f"Error analyzing image: {str(e)}"
-
-    def generate_multilingual_response(self, query, target_language='en'):
-        """Generate response in specific language"""
-        if target_language == 'en':
-            return self.generate_text_response(query)
-
-        # For other languages, generate in English then translate
-        response_en = self.generate_text_response(query)
-
-        # Simple translation dictionary (in production, use proper translation API)
-        translations = {
-            'ta': {'Consult a doctor': 'மருத்துவரைக் கலந்தாலோசிக்கவும்'},
-            'hi': {'Consult a doctor': 'डॉक्टर से परामर्श करें'},
-            'fr': {'Consult a doctor': 'Consultez un médecin'},
-            'te': {'Consult a doctor': 'డాక్టర్‌ను సంప్రదించండి'},
-            'ml': {'Consult a doctor': 'ഒരു ഡോക്ടറെ കാണുക'},
-            'kn': {'Consult a doctor': 'ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ'}
+        # Set up the model
+        generation_config = {
+            "temperature": 0.7,
+            "top_p": 0.8,
+            "top_k": 40,
+            "max_output_tokens": 1024,
         }
 
-        if target_language in translations:
-            for eng, trans in translations[target_language].items():
-                response_en = response_en.replace(eng, trans)
+        safety_settings = [
+            {
+                "category": "HARM_CATEGORY_HARASSMENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_HATE_SPEECH",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+            {
+                "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+            },
+        ]
 
-        return response_en
+        model = genai.GenerativeModel(
+            model_name="gemini-pro",
+            generation_config=generation_config,
+            safety_settings=safety_settings
+        )
 
-    def is_available(self):
-        """Check if Gemini API is available"""
-        return self.api_key is not None and self.model_text is not None
+        print("✅ Gemini AI setup successful")
+        return model
+    except Exception as e:
+        print(f"❌ Error setting up Gemini: {e}")
+        return None
 
 
-# Singleton instance
-gemini_helper = GeminiHelper()
+# Initialize Gemini model
+gemini_model = setup_gemini()
+
+
+def load_knowledge_base():
+    """Load offline medical knowledge base"""
+    try:
+        with open('knowledge_base.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("❌ knowledge_base.json not found")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"❌ Error parsing knowledge_base.json: {e}")
+        return []
+
+
+def get_offline_response(query, language='en'):
+    """Get response from offline knowledge base"""
+    kb = load_knowledge_base()
+    query_lower = query.lower()
+
+    for item in kb:
+        keywords = item.get("keywords", [])
+        for keyword in keywords:
+            if keyword in query_lower:
+                response_key = f"response_{language}"
+                return item.get(response_key, item.get("response_en", ""))
+
+    return None
+
+
+def ask_gemini_medical(query, user_context=None):
+    """Ask Gemini AI a medical question"""
+
+    # First try offline knowledge base
+    offline_response = get_offline_response(query, 'en')
+    if offline_response:
+        return offline_response
+
+    # If Gemini is not available, return None
+    if not gemini_model:
+        return None
+
+    try:
+        # Prepare context for the AI
+        context_prompt = """You are MediCoBot, a helpful and cautious AI medical assistant.
+
+IMPORTANT RULES:
+1. You are NOT a doctor - always emphasize consulting healthcare professionals
+2. Never diagnose specific conditions
+3. Never prescribe medications
+4. Provide general health information only
+5. For emergencies, advise calling emergency services immediately
+6. Be clear, concise, and helpful
+7. Format responses with bullet points for readability
+
+User query: {query}
+
+User context (if available): {user_context}
+
+Please provide helpful medical information following the rules above."""
+
+        # Format user context
+        context_info = ""
+        if user_context:
+            context_parts = []
+            if user_context.get('age'):
+                context_parts.append(f"Age: {user_context['age']}")
+            if user_context.get('gender'):
+                context_parts.append(f"Gender: {user_context['gender']}")
+            if user_context.get('allergies'):
+                context_parts.append(f"Allergies: {user_context['allergies']}")
+            if user_context.get('medications'):
+                context_parts.append(f"Medications: {user_context['medications']}")
+
+            if context_parts:
+                context_info = "\n".join(context_parts)
+
+        full_prompt = context_prompt.format(query=query, user_context=context_info)
+
+        # Generate response
+        response = gemini_model.generate_content(full_prompt)
+
+        # Check if response is blocked
+        if not response or not response.text:
+            return "⚠️ I cannot provide a response to this query for safety reasons. Please consult a healthcare professional."
+
+        # Add disclaimer
+        disclaimer = "\n\n---\n⚠️ **Important**: This is AI-generated general information. Always consult a qualified healthcare professional for medical advice."
+
+        return response.text + disclaimer
+
+    except Exception as e:
+        print(f"❌ Gemini API error: {e}")
+        return None
+
+
+def analyze_symptoms_with_gemini(symptoms, user_info=None):
+    """Analyze symptoms with Gemini AI"""
+
+    if not gemini_model:
+        return get_offline_response(symptoms, 'en')
+
+    try:
+        prompt = f"""Analyze these symptoms: {symptoms}
+
+Provide helpful information in this format:
+
+1. **Possible general considerations** (not diagnosis)
+2. **Recommended immediate actions**
+3. **When to seek medical attention**
+4. **Home care tips** (if appropriate)
+5. **Emergency warning signs**
+
+Important: Always advise consulting a doctor for proper diagnosis."""
+
+        response = gemini_model.generate_content(prompt)
+        if response and response.text:
+            return response.text + "\n\n⚠️ **Note**: AI analysis only. Consult a doctor."
+        return None
+
+    except Exception as e:
+        print(f"❌ Gemini symptom analysis error: {e}")
+        return get_offline_response(symptoms, 'en')

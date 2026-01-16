@@ -1,63 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home - MediCoBot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCoBot - Your AI Medical Assistant</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .hero-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        footer {
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="/">MediCoBot</a>
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-heartbeat text-danger"></i> MediCoBot
+            </a>
             <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/chat">Chat</a>
                 {% if current_user.is_authenticated %}
-                    <a class="nav-link" href="/profile">Profile</a>
-                    <a class="nav-link" href="/logout">Logout</a>
-                    {% if current_user.role == 'admin' %}
-                        <a class="nav-link" href="/admin">Admin</a>
-                    {% endif %}
+                    <a class="nav-link" href="/chat"><i class="fas fa-comment-medical"></i> Chat</a>
+                    <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Profile</a>
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 {% else %}
-                    <a class="nav-link" href="/login">Login</a>
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Register</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h1>Welcome to MediCoBot</h1>
-        <p>Your AI-powered medical assistant</p>
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero-section text-center">
+            <h1 class="display-4 fw-bold mb-4">Welcome to <span class="text-primary">MediCoBot</span></h1>
+            <p class="lead mb-4">Your AI-powered medical assistant providing instant health advice and symptom analysis.</p>
 
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Chat with AI</h5>
-                        <p class="card-text">Get instant medical advice from our AI chatbot</p>
-                        <a href="/chat" class="btn btn-primary">Start Chat</a>
+            {% if not current_user.is_authenticated %}
+                <div class="mt-4">
+                    <a href="/register" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-user-plus"></i> Create Free Account
+                    </a>
+                    <a href="/chat" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-comment-medical"></i> Try Demo Chat
+                    </a>
+                </div>
+            {% else %}
+                <div class="mt-4">
+                    <a href="/chat" class="btn btn-primary btn-lg">
+                        <i class="fas fa-comment-medical"></i> Start Chatting Now
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Features -->
+        <div class="row mt-5">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
                     </div>
+                    <h4>Symptom Analysis</h4>
+                    <p>Describe your symptoms and get preliminary analysis with recommended actions.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h4>Voice Input</h4>
+                    <p>Speak your symptoms for hands-free interaction and quick assistance.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h4>Image Analysis</h4>
+                    <p>Upload medical images for preliminary visual analysis and recommendations.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h4>Medical History</h4>
+                    <p>Track your symptoms, conversations, and medical records securely.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="row mt-5">
+            <div class="col-md-8 offset-md-2">
+                <div class="feature-card">
+                    <h3 class="text-center mb-4"><i class="fas fa-lightbulb"></i> Quick Tips</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Be specific when describing symptoms</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Mention duration and severity of symptoms</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Upload clear images for better analysis</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Include age and medical history when relevant</li>
+                        <li><i class="fas fa-check-circle text-success"></i> Always consult a doctor for serious symptoms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mt-5 text-center">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <h5>Availability</h5>
+                    <p>Always available for medical queries</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Image Analysis</h5>
-                        <p class="card-text">Upload medical images for analysis</p>
-                        <a href="/chat" class="btn btn-primary">Upload Image</a>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-number">3+</div>
+                    <h5>Languages</h5>
+                    <p>Support for English, Hindi, Tamil</p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Medical History</h5>
-                        <p class="card-text">Track your medical conversations</p>
-                        <a href="/profile" class="btn btn-primary">View Profile</a>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <h5>Private</h5>
+                    <p>Your data is secure and encrypted</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 MediCoBot. Your AI Medical Assistant.</p>
+            <p class="text-muted small mt-2">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                This is an AI assistant for preliminary guidance only. Always consult a healthcare professional for medical diagnosis.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

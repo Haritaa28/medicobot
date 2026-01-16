@@ -1,30 +1,32 @@
 [
   {
-    "keywords": [
-      "hello",
-      "hi",
-      "hey"
-    ],
-    "answer_en": "Hello! How can I help you with medical questions today?",
-    "answer_hi": "नमस्ते! मैं आपकी मदद कैसे कर सकता हूं?",
-    "answer_ta": "வணக்கம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?"
+    "keywords": ["fever", "temperature", "hot"],
+    "response_en": "**For Fever:**\n\n• Rest and stay hydrated\n• Take paracetamol (500mg every 6 hours)\n• Monitor temperature every 4 hours\n• See doctor if:\n  - Fever >102°F (39°C)\n  - Lasts >3 days\n  - With rash or stiff neck",
+    "response_hi": "**बुखार के लिए:**\n\n• आराम करें और हाइड्रेटेड रहें\n• पैरासिटामोल लें (500mg हर 6 घंटे)\n• हर 4 घंटे में तापमान जांचें\n• डॉक्टर को दिखाएं अगर:\n  - बुखार >102°F (39°C)\n  - 3 दिन से अधिक रहे\n  - रैश या गर्दन अकड़न के साथ",
+    "response_ta": "**காய்ச்சலுக்கு:**\n\n• ஓய்வெடுக்கவும் மற்றும் நீரேற்றமாக இருங்கள்\n• பாராசிட்டமால் எடுத்துக் கொள்ளுங்கள் (500mg ஒவ்வொரு 6 மணி நேரத்திற்கும்)\n• ஒவ்வொரு 4 மணி நேரத்திற்கும் வெப்பநிலையை கண்காணிக்கவும்\n• மருத்துவரைப் பார்க்கவும்:\n  - காய்ச்சல் >102°F (39°C)\n  - 3 நாட்களுக்கு மேல் நீடிக்கும்\n  - சொறி அல்லது கழுத்து விறைப்பு உள்ளது"
   },
   {
-    "keywords": [
-      "fever",
-      "temperature"
-    ],
-    "answer_en": "For fever: Rest, drink plenty of fluids, and take paracetamol if needed. Consult doctor if fever persists beyond 3 days.",
-    "answer_hi": "बुखार के लिए: आराम करें, पर्याप्त तरल पदार्थ पिएं, और आवश्यकता पड़ने पर पैरासिटामोल लें। यदि बुखार 3 दिन से अधिक रहता है तो डॉक्टर से सलाह लें।",
-    "answer_ta": "காய்ச்சலுக்கு: ஓய்வெடுக்கவும், நிறைய திரவங்களை குடிக்கவும், தேவைப்பட்டால் பாராசிட்டமால் எடுத்துக் கொள்ளுங்கள். 3 நாட்களுக்கு மேல் காய்ச்சல் தொடர்ந்தால் மருத்துவரைக் கலந்தாலோசிக்கவும்."
+    "keywords": ["headache", "head pain", "migraine"],
+    "response_en": "**For Headache:**\n\n• Rest in dark, quiet room\n• Drink plenty of water\n• Apply cold compress to forehead\n• Take ibuprofen (200-400mg)\n• See doctor if:\n  - Sudden severe headache\n  - With vision changes\n  - After head injury",
+    "response_hi": "**सिरदर्द के लिए:**\n\n• अंधेरे, शांत कमरे में आराम करें\n• खूब पानी पिएं\n• माथे पर ठंडा सेक लगाएं\n• आइबुप्रोफेन लें (200-400mg)\n• डॉक्टर को दिखाएं अगर:\n  - अचानक तेज सिरदर्द\n  - दृष्टि में बदलाव के साथ\n  - सिर में चोट के बाद",
+    "response_ta": "**தலைவலிக்கு:**\n\n• இருண்ட, அமைதியான அறையில் ஓய்வெடுக்கவும்\n• நிறைய தண்ணீர் குடிக்கவும்\n• நெற்றியில் குளிர் கவசம் வைக்கவும்\n• இபுபுரோபென் எடுத்துக் கொள்ளுங்கள் (200-400mg)\n• மருத்துவரைப் பார்க்கவும்:\n  - திடீர் கடுமையான தலைவலி\n  - பார்வை மாற்றங்களுடன்\n  - தலை காயம் பட்ட பிறகு"
   },
   {
-    "keywords": [
-      "headache",
-      "head pain"
-    ],
-    "answer_en": "For headache: Rest in a dark room, drink water, and consider over-the-counter pain relief. See a doctor if severe or persistent.",
-    "answer_hi": "सिरदर्द के लिए: अंधेरे कमरे में आराम करें, पानी पिएं, और ओवर-द-काउंटर दर्द निवारक पर विचार करें। यदि गंभीर या लगातार हो तो डॉक्टर से सलाह लें।",
-    "answer_ta": "தலைவலிக்கு: இருண்ட அறையில் ஓய்வெடுக்கவும், தண்ணீர் குடிக்கவும், மேலும் ஓவர்-தெ-கவுண்டர் வலி நிவாரணியைக் கவனியுங்கள். கடுமையான அல்லது தொடர்ச்சியான வலி இருந்தால் மருத்துவரைக் காணவும்."
+    "keywords": ["cough", "cold", "sore throat"],
+    "response_en": "**For Cough & Cold:**\n\n• Drink warm fluids (tea, soup)\n• Use honey for cough (1 tsp every 4 hours)\n• Gargle with salt water\n• Steam inhalation helps\n• See doctor if:\n  - Difficulty breathing\n  - Coughing blood\n  - Fever >101°F",
+    "response_hi": "**खांसी और जुकाम के लिए:**\n\n• गर्म तरल पदार्थ पिएं (चाय, सूप)\n• खांसी के लिए शहद का प्रयोग करें (1 चम्मच हर 4 घंटे)\n• नमक के पानी से गरारे करें\n• भाप लेना मदद करता है\n• डॉक्टर को दिखाएं अगर:\n  - सांस लेने में तकलीफ\n  - खून की खांसी\n  - बुखार >101°F",
+    "response_ta": "**இருமல் மற்றும் சளிக்கு:**\n\n• சூடான திரவங்களை குடிக்கவும் (தேநீர், சூப்)\n• இருமலுக்கு தேன் பயன்படுத்தவும் (1 தேக்கரண்டி ஒவ்வொரு 4 மணி நேரத்திற்கும்)\n• உப்பு நீரில் கழுவவும்\n• நீராவி உள்ளிழுத்தல் உதவுகிறது\n• மருத்துவரைப் பார்க்கவும்:\n  - சுவாசிக்க கடினமாக\n  - இரத்தம் இருமல்\n  - காய்ச்சல் >101°F"
+  },
+  {
+    "keywords": ["stomach pain", "diarrhea", "vomiting", "nausea"],
+    "response_en": "**For Stomach Issues:**\n\n• BRAT diet: Bananas, Rice, Applesauce, Toast\n• Drink ORS solution\n• Avoid dairy and fatty foods\n• Rest and stay hydrated\n• See doctor if:\n  - Severe abdominal pain\n  - Blood in stool/vomit\n  - Dehydration signs",
+    "response_hi": "**पेट की समस्याओं के लिए:**\n\n• BRAT आहार: केले, चावल, सेब की चटनी, टोस्ट\n• ORS घोल पिएं\n• डेयरी और वसायुक्त भोजन से बचें\n• आराम करें और हाइड्रेटेड रहें\n• डॉक्टर को दिखाएं अगर:\n  - गंभीर पेट दर्द\n  - मल/उल्टी में खून\n  - निर्जलीकरण के लक्षण",
+    "response_ta": "**வயிற்றுப் பிரச்சனைகளுக்கு:**\n\n• BRAT உணவு: வாழைப்பழங்கள், அரிசி, ஆப்பிள் சாஸ், டோஸ்ட்\n• ORS கரைசல் குடிக்கவும்\n• பால் மற்றும் கொழுப்பு உணவுகளை தவிர்க்கவும்\n• ஓய்வெடுக்கவும் மற்றும் நீரேற்றமாக இருங்கள்\n• மருத்துவரைப் பார்க்கவும்:\n  - கடுமையான வயிற்று வலி\n  - மலம்/வாந்தியில் இரத்தம்\n  - நீரிழப்பு அறிகுறிகள்"
+  },
+  {
+    "keywords": ["allergy", "sneezing", "itching", "rash"],
+    "response_en": "**For Allergies:**\n\n• Take antihistamine (cetirizine 10mg)\n• Avoid known allergens\n• Use cold compress for itching\n• Keep windows closed during high pollen\n• See doctor if:\n  - Difficulty breathing\n  - Swelling of face/lips\n  - Severe rash",
+    "response_hi": "**एलर्जी के लिए:**\n\n• एंटीहिस्टामाइन लें (सेटिरिज़िन 10mg)\n• ज्ञात एलर्जेन से बचें\n• खुजली के लिए ठंडा सेक लगाएं\n• उच्च पराग के दौरान खिड़कियां बंद रखें\n• डॉक्टर को दिखाएं अगर:\n  - सांस लेने में तकलीफ\n  - चेहरे/होंठों की सूजन\n  - गंभीर दाने",
+    "response_ta": "**ஒவ்வாமைக்கு:**\n\n• ஆன்டிஹிஸ்டமைன் எடுத்துக் கொள்ளுங்கள் (செடிரிஸின் 10mg)\n• அறியப்பட்ட ஒவ்வாமை தூண்டிகளை தவிர்க்கவும்\n• அரிப்புக்கு குளிர் கவசம் பயன்படுத்தவும்\n• அதிக மகரந்த காலத்தில் ஜன்னல்களை மூடி வைக்கவும்\n• மருத்துவரைப் பார்க்கவும்:\n  - சுவாசிக்க கடினமாக\n  - முகம்/உதடுகளின் வீக்கம்\n  - கடுமையான சொறி"
   }
 ]
