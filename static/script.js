@@ -1,421 +1,565 @@
-// Main JavaScript file for MedicoBot
+// Global variables
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
 
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-    setupEventListeners();
-    checkSystemStatus();
+    initializeChat();
+    checkBrowserSupport();
+    loadChatHistory();
 });
 
-function initializeApp() {
-    // Set current year in footer
-    const yearSpan = document.getElementById('currentYear');
-    if (yearSpan) {
-        yearSpan.textContent = new Date().getFullYear();
-    }
-
-    // Initialize tooltips
-    initTooltips();
-
-    // Initialize animations
-    initAnimations();
-
-    // Check for saved language preference
-    const savedLang = localStorage.getItem('preferredLanguage');
-    if (savedLang) {
-        const langSelect = document.getElementById('languageSelect');
-        if (langSelect) {
-            langSelect.value = savedLang;
-        }
-    }
-
-    // Check for dark mode preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        enableDarkMode();
+function initializeChat() {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        scrollToBottom();
     }
 }
 
-function setupEventListeners() {
-    // Language selector
-    const langSelect = document.getElementById('languageSelect');
-    if (langSelect) {
-        langSelect.addEventListener('change', function(e) {
-            localStorage.setItem('preferredLanguage', e.target.value);
-            showNotification(`Language changed to ${e.target.options[e.target.selectedIndex].text}`);
-        });
-    }
-
-    // Mode toggle
-    const modeToggle = document.getElementById('modeToggle');
-    if (modeToggle) {
-        modeToggle.addEventListener('click', toggleAppMode);
-    }
-
-    // Mobile menu toggle
-    const navToggle = document.getElementById('navToggle');
-    if (navToggle) {
-        navToggle.addEventListener('click', toggleMobileMenu);
-    }
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(e) {
-        const navMenu = document.getElementById('navMenu');
-        const navToggle = document.getElementById('navToggle');
-
-        if (navMenu && navToggle &&
-            !navMenu.contains(e.target) &&
-            !navToggle.contains(e.target) &&
-            navMenu.classList.contains('show')) {
-            navMenu.classList.remove('show');
-        }
-    });
-
-    // Form validation
-    const forms = document.querySelectorAll('form[novalidate]');
-    forms.forEach(form => {
-        form.addEventListener('submit', validateForm);
-    });
-
-    // Auto-dismiss flash messages
-    const flashMessages = document.querySelectorAll('.flash-message');
-    flashMessages.forEach(msg => {
-        setTimeout(() => {
-            msg.style.animation = 'slideIn 0.3s ease reverse';
-            setTimeout(() => msg.remove(), 300);
-        }, 5000);
-    });
-}
-
-function initTooltips() {
-    const tooltipElements = document.querySelectorAll('[data-tooltip]');
-
-    tooltipElements.forEach(element => {
-        element.addEventListener('mouseenter', function(e) {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = this.getAttribute('data-tooltip');
-            document.body.appendChild(tooltip);
-
-            const rect = this.getBoundingClientRect();
-            tooltip.style.left = rect.left + (rect.width / 2) + 'px';
-            tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-
-            this._tooltip = tooltip;
-        });
-
-        element.addEventListener('mouseleave', function() {
-            if (this._tooltip) {
-                this._tooltip.remove();
-                this._tooltip = null;
-            }
-        });
-    });
-}
-
-function initAnimations() {
-    // Intersection Observer for scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements with animation classes
-    document.querySelectorAll('.fade-in, .slide-up').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-async function checkSystemStatus() {
-    try {
-        const response = await fetch('/api/status');
-        const data = await response.json();
-
-        updateStatusIndicator(data);
-    } catch (error) {
-        console.error('Error checking system status:', error);
+function scrollToBottom() {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 }
 
-function updateStatusIndicator(status) {
-    const indicator = document.getElementById('systemStatus');
-    if (!indicator) return;
+// ==================== MESSAGE HANDLING ====================
 
-    if (status.offline_mode) {
-        indicator.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline Mode';
-        indicator.className = 'status-offline';
-    } else {
-        let services = [];
-        if (status.gemini_api) services.push('AI');
-        if (status.translation_api) services.push('Translation');
-        if (status.news_api) services.push('News');
-
-        indicator.innerHTML = `<i class="fas fa-wifi"></i> Online (${services.join(', ')})`;
-        indicator.className = 'status-online';
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
     }
 }
 
-function toggleAppMode() {
-    const modeBtn = document.getElementById('modeToggle');
-    const currentMode = modeBtn.textContent;
-    const newMode = currentMode === 'Online' ? 'Offline' : 'Online';
+function quickQuestion(question) {
+    const input = document.getElementById('message-input');
+    if (input) {
+        input.value = question;
+        sendMessage();
+    }
+}
 
-    fetch('/toggle_mode', {
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    if (!input) return;
+
+    const message = input.value.trim();
+
+    if (!message) {
+        alert('Please type a message');
+        return;
+    }
+
+    // Add user message to chat
+    addMessage(message, 'user');
+    input.value = '';
+
+    // Show typing indicator
+    showTypingIndicator();
+
+    // Send to server
+    fetch('/api/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ mode: newMode.toLowerCase() })
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        removeTypingIndicator();
+        if (data.response) {
+            addMessage(data.response, 'bot');
+        } else {
+            addMessage('Sorry, I could not process your request.', 'bot');
+        }
+        scrollToBottom();
+    })
+    .catch(error => {
+        removeTypingIndicator();
+        addMessage('Sorry, an error occurred. Please try again.', 'bot');
+        console.error('Error:', error);
+        scrollToBottom();
+    });
+}
+
+function addMessage(text, sender) {
+    const messagesDiv = document.getElementById('chat-messages');
+    if (!messagesDiv) return;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message mb-3`;
+
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Ensure text is a string
+    const safeText = text || '';
+
+    if (sender === 'user') {
+        messageDiv.innerHTML = `
+            <div class="d-flex justify-content-end">
+                <div class="flex-grow-1 text-end me-3">
+                    <div class="message-content bg-primary text-white p-3 rounded">
+                        <p class="mb-0">${escapeHtml(safeText)}</p>
+                    </div>
+                    <small class="text-muted">${timeString}</small>
+                </div>
+                <div class="flex-shrink-0">
+                    <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                </div>
+            </div>
+        `;
+    } else {
+        // Format bot response safely
+        const formattedText = formatBotResponse(safeText);
+
+        messageDiv.innerHTML = `
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-robot fa-2x text-primary"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="message-content bg-light p-3 rounded">
+                        <strong>MediCoBot:</strong>
+                        <div class="mb-0 mt-2">${formattedText}</div>
+                    </div>
+                    <small class="text-muted">${timeString}</small>
+                </div>
+            </div>
+        `;
+    }
+
+    messagesDiv.appendChild(messageDiv);
+    scrollToBottom();
+}
+
+function formatBotResponse(text) {
+    if (!text) return '';
+
+    // Convert text to string if it's not
+    const safeText = String(text);
+
+    try {
+        // Convert markdown-style formatting to HTML
+        let formatted = safeText
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/•/g, '&bull;')
+            .replace(/\n/g, '<br>');
+
+        // Convert URLs to links
+        formatted = formatted.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+
+        return formatted;
+    } catch (e) {
+        console.error('Error formatting text:', e);
+        return safeText; // Return unformatted text if error occurs
+    }
+}
+
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+
+    return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function showTypingIndicator() {
+    const messagesDiv = document.getElementById('chat-messages');
+    if (!messagesDiv) return;
+
+    // Remove existing indicator if any
+    removeTypingIndicator();
+
+    const indicator = document.createElement('div');
+    indicator.id = 'typing-indicator';
+    indicator.className = 'bot-message mb-3';
+    indicator.innerHTML = `
+        <div class="d-flex">
+            <div class="flex-shrink-0">
+                <i class="fas fa-robot fa-2x text-primary"></i>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    `;
+    messagesDiv.appendChild(indicator);
+    scrollToBottom();
+}
+
+function removeTypingIndicator() {
+    const indicator = document.getElementById('typing-indicator');
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
+// ==================== IMAGE HANDLING ====================
+
+function uploadImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Check file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid image file (JPEG, PNG, GIF, WEBP)');
+        return;
+    }
+
+    // Check file size (max 16MB)
+    if (file.size > 16 * 1024 * 1024) {
+        alert('File size too large. Maximum size is 16MB.');
+        return;
+    }
+
+    // Preview image
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        addImagePreview(e.target.result);
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to server
+    const formData = new FormData();
+    formData.append('image', file);
+
+    showTypingIndicator();
+
+    fetch('/api/analyze-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Upload failed');
+        }
+        return response.json();
+    })
+    .then(data => {
+        removeTypingIndicator();
+        if (data.success && data.response) {
+            addMessage(data.response, 'bot');
+        } else {
+            addMessage('Image uploaded but analysis failed. Please try again.', 'bot');
+        }
+    })
+    .catch(error => {
+        removeTypingIndicator();
+        addMessage('Image upload failed. Please try again.', 'bot');
+        console.error('Error:', error);
+    });
+
+    // Clear the input
+    event.target.value = '';
+}
+
+function addImagePreview(imageData) {
+    const messagesDiv = document.getElementById('chat-messages');
+    if (!messagesDiv) return;
+
+    const previewDiv = document.createElement('div');
+    previewDiv.className = 'message user-message mb-3';
+    previewDiv.innerHTML = `
+        <div class="d-flex justify-content-end">
+            <div class="flex-grow-1 text-end me-3">
+                <div class="message-content bg-primary text-white p-3 rounded">
+                    <img src="${imageData}" class="image-preview" alt="Uploaded image" style="max-width: 200px; max-height: 200px; border-radius: 10px;">
+                    <p class="mb-0 mt-2"><small>Image uploaded for analysis</small></p>
+                </div>
+                <small class="text-muted">Just now</small>
+            </div>
+            <div class="flex-shrink-0">
+                <i class="fas fa-user-circle fa-2x text-secondary"></i>
+            </div>
+        </div>
+    `;
+    messagesDiv.appendChild(previewDiv);
+    scrollToBottom();
+}
+
+// ==================== VOICE HANDLING ====================
+
+function checkBrowserSupport() {
+    const voiceBtn = document.querySelector('[onclick="startVoice()"]');
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.log('Voice recording not supported in this browser');
+        if (voiceBtn) {
+            voiceBtn.disabled = true;
+            voiceBtn.title = 'Voice recording not supported in this browser';
+            voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Voice Not Supported';
+        }
+    }
+}
+
+function startVoice() {
+    if (isRecording) {
+        stopRecording();
+    } else {
+        startRecording();
+    }
+}
+
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            sendVoiceData(audioBlob);
+
+            // Stop all tracks
+            stream.getTracks().forEach(track => track.stop());
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+
+        // Update UI
+        const voiceBtn = document.querySelector('[onclick="startVoice()"]');
+        if (voiceBtn) {
+            voiceBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
+            voiceBtn.classList.add('recording');
+        }
+
+        // Automatically stop after 10 seconds
+        setTimeout(() => {
+            if (isRecording) {
+                stopRecording();
+            }
+        }, 10000);
+
+    } catch (error) {
+        console.error('Error accessing microphone:', error);
+        alert('Could not access microphone. Please check permissions.');
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+
+        // Update UI
+        const voiceBtn = document.querySelector('[onclick="startVoice()"]');
+        if (voiceBtn) {
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i> Tap to speak';
+            voiceBtn.classList.remove('recording');
+        }
+    }
+}
+
+function sendVoiceData(audioBlob) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recording.wav');
+
+    showTypingIndicator();
+
+    fetch('/api/process-voice', {
+        method: 'POST',
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
-        modeBtn.textContent = newMode;
-        showNotification(`Switched to ${newMode} mode`);
-        checkSystemStatus();
+        removeTypingIndicator();
+        if (data.success && data.text) {
+            // Add the transcribed text to input
+            const input = document.getElementById('message-input');
+            if (input) {
+                input.value = data.text;
+                // Optional: Auto-send after voice
+                // sendMessage();
+            }
+            addMessage(`🎤 Voice transcribed: "${data.text}"`, 'bot');
+        } else {
+            addMessage('Voice input processed. Please type your message.', 'bot');
+        }
     })
     .catch(error => {
-        console.error('Error toggling mode:', error);
-        showNotification('Failed to switch mode', 'error');
+        removeTypingIndicator();
+        console.error('Error sending voice data:', error);
+        addMessage('Voice processing failed. Please try again.', 'bot');
     });
 }
 
-function toggleMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    if (navMenu) {
-        navMenu.classList.toggle('show');
-    }
-}
+// ==================== CHAT HISTORY ====================
 
-function validateForm(e) {
-    const form = e.target;
-    const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-    let isValid = true;
+function loadChatHistory() {
+    fetch('/api/chat-history')
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.chats && data.chats.length > 0) {
+            const messagesDiv = document.getElementById('chat-messages');
+            if (messagesDiv) {
+                // Clear welcome message
+                messagesDiv.innerHTML = '';
 
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            markInvalid(input, 'This field is required');
-            isValid = false;
-        } else {
-            markValid(input);
-
-            // Email validation
-            if (input.type === 'email') {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(input.value)) {
-                    markInvalid(input, 'Please enter a valid email address');
-                    isValid = false;
-                }
-            }
-
-            // Password validation
-            if (input.type === 'password' && input.value.length < 6) {
-                markInvalid(input, 'Password must be at least 6 characters');
-                isValid = false;
+                // Add history in reverse order
+                data.chats.reverse().forEach(chat => {
+                    if (chat.message) {
+                        addMessage(chat.message, 'user');
+                    }
+                    if (chat.response) {
+                        addMessage(chat.response, 'bot');
+                    }
+                });
             }
         }
+    })
+    .catch(error => console.error('Error loading chat history:', error));
+}
+
+// ==================== TEST IMAGES ====================
+
+function loadTestImages() {
+    fetch('/api/test-images')
+    .then(response => response.json())
+    .then(images => {
+        let html = '';
+        images.forEach(img => {
+            html += `
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <img src="${img.url}" class="card-img-top" alt="${img.name}" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h6>${img.name}</h6>
+                            <p class="small">${img.description}</p>
+                            <button class="btn btn-sm btn-primary" onclick="useTestImage('${img.url}')">
+                                Use This Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById('test-images-container').innerHTML = html;
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('testImagesModal'));
+        modal.show();
+    })
+    .catch(error => {
+        console.error('Error loading test images:', error);
+        alert('Could not load test images');
+    });
+}
+
+function useTestImage(imageUrl) {
+    fetch(imageUrl)
+    .then(res => res.blob())
+    .then(blob => {
+        const file = new File([blob], "test-image.jpg", { type: "image/jpeg" });
+
+        // Create form data
+        const formData = new FormData();
+        formData.append('image', file);
+
+        // Show preview
+        addImagePreview(imageUrl);
+
+        // Upload
+        showTypingIndicator();
+
+        fetch('/api/analyze-image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            removeTypingIndicator();
+            if (data.success && data.response) {
+                addMessage(data.response, 'bot');
+            } else {
+                addMessage('Image analysis completed', 'bot');
+            }
+        })
+        .catch(error => {
+            removeTypingIndicator();
+            console.error('Error:', error);
+            addMessage('Image analysis failed', 'bot');
+        });
+    })
+    .catch(error => {
+        console.error('Error loading test image:', error);
+        alert('Could not load test image');
     });
 
-    if (!isValid) {
-        e.preventDefault();
-        showNotification('Please fix the errors in the form', 'error');
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('testImagesModal'));
+    if (modal) {
+        modal.hide();
     }
 }
 
-function markInvalid(input, message) {
-    input.classList.add('invalid');
-    input.classList.remove('valid');
+// ==================== UTILITIES ====================
 
-    let errorMsg = input.nextElementSibling;
-    if (!errorMsg || !errorMsg.classList.contains('error-message')) {
-        errorMsg = document.createElement('div');
-        errorMsg.className = 'error-message';
-        input.parentNode.insertBefore(errorMsg, input.nextSibling);
-    }
-    errorMsg.textContent = message;
+function exportChat() {
+    const messages = [];
+    document.querySelectorAll('.message').forEach(msg => {
+        const textElement = msg.querySelector('.message-content');
+        const text = textElement ? textElement.innerText : '';
+        const isBot = msg.classList.contains('bot-message');
+        const timeElement = msg.querySelector('small');
+        const time = timeElement ? timeElement.innerText : '';
+
+        messages.push({
+            sender: isBot ? 'MediCoBot' : 'User',
+            message: text,
+            time: time
+        });
+    });
+
+    const dataStr = JSON.stringify(messages, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    const exportFileDefaultName = `medicobot-chat-${new Date().toISOString().slice(0,10)}.json`;
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
 }
 
-function markValid(input) {
-    input.classList.remove('invalid');
-    input.classList.add('valid');
+// Global error handler
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Global error:', {msg, url, lineNo, columnNo, error});
 
-    const errorMsg = input.nextElementSibling;
-    if (errorMsg && errorMsg.classList.contains('error-message')) {
-        errorMsg.remove();
-    }
-}
-
-function showNotification(message, type = 'success') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.custom-notification');
-    existingNotifications.forEach(notif => notif.remove());
-
-    // Create notification
-    const notification = document.createElement('div');
-    notification.className = `custom-notification notification-${type}`;
-    notification.innerHTML = `
-        <span>${message}</span>
-        <button class="notification-close">&times;</button>
+    // Show user-friendly message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-danger alert-dismissible fade show';
+    errorDiv.role = 'alert';
+    errorDiv.innerHTML = `
+        An error occurred. Please refresh the page.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 10px;
-        color: white;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        animation: slideIn 0.3s ease;
-        max-width: 400px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    `;
-
-    // Set background based on type
-    if (type === 'success') {
-        notification.style.background = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
-    } else if (type === 'error') {
-        notification.style.background = 'linear-gradient(135deg, #ff4d4d 0%, #ff944d 100%)';
-    } else if (type === 'info') {
-        notification.style.background = 'linear-gradient(135deg, #4d79ff 0%, #00ccff 100%)';
+    const container = document.querySelector('.container');
+    if (container) {
+        container.prepend(errorDiv);
     }
 
-    // Add close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.style.cssText = `
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        transition: background 0.3s;
-    `;
-
-    closeBtn.addEventListener('mouseenter', function() {
-        this.style.background = 'rgba(255,255,255,0.2)';
-    });
-
-    closeBtn.addEventListener('mouseleave', function() {
-        this.style.background = 'none';
-    });
-
-    closeBtn.addEventListener('click', function() {
-        notification.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => notification.remove(), 300);
-    });
-
-    document.body.appendChild(notification);
-
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideIn 0.3s ease reverse';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 5000);
-}
-
-function enableDarkMode() {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-}
-
-function disableDarkMode() {
-    document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
-}
-
-function toggleDarkMode() {
-    if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        disableDarkMode();
-    } else {
-        enableDarkMode();
-    }
-}
-
-// Utility function for making API calls
-async function makeApiCall(endpoint, method = 'GET', data = null) {
-    const headers = {
-        'Content-Type': 'application/json',
-    };
-
-    // Add authentication token if available
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const config = {
-        method: method,
-        headers: headers,
-    };
-
-    if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
-        config.body = JSON.stringify(data);
-    }
-
-    try {
-        const response = await fetch(endpoint, config);
-
-        if (!response.ok) {
-            throw new Error(`API call failed: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('API call error:', error);
-        throw error;
-    }
-}
-
-// Format date
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Export functions for use in other files
-window.MedicoBot = {
-    showNotification,
-    makeApiCall,
-    formatDate,
-    debounce
+    return false;
 };
