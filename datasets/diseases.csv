@@ -1,15 +1,181 @@
 name,category,symptoms,description,treatments,precautions,severity
-Common Cold,respiratory,"runny nose, sore throat, cough, sneezing, mild fever","Viral infection of the upper respiratory tract","Rest, hydration, over-the-counter cold medicine","Wash hands regularly, avoid close contact with sick people",low
-Influenza,fever,"high fever, body aches, fatigue, cough, headache","Viral infection affecting the respiratory system","Antiviral medication, rest, fluids","Annual flu vaccination, good hygiene",medium
-Pneumonia,respiratory,"cough with phlegm, fever, chills, difficulty breathing","Infection that inflames air sacs in one or both lungs","Antibiotics, rest, hydration","Vaccination, good hygiene, avoid smoking",high
-Dengue Fever,fever,"high fever, severe headache, pain behind eyes, muscle and joint pain","Mosquito-borne viral infection","Rest, hydration, pain relievers","Mosquito control, use of mosquito nets",high
-Malaria,fever,"fever, chills, headache, nausea, vomiting","Parasitic disease transmitted by mosquitoes","Antimalarial drugs","Mosquito nets, insect repellent, prophylactic medication",high
-Eczema,skin,"itchy, inflamed skin, redness, dry patches","Chronic skin condition causing itchy, inflamed skin","Moisturizers, topical steroids, antihistamines","Avoid triggers, keep skin moisturized",low
-Acne,skin,"pimples, blackheads, whiteheads, oily skin","Skin condition when hair follicles are clogged with oil and dead skin","Topical treatments, oral medications, lifestyle changes","Regular cleansing, avoid touching face",low
-Psoriasis,skin,"red patches, silvery scales, itching, burning","Autoimmune condition that speeds up skin cell growth","Topical treatments, light therapy, systemic medications","Manage stress, avoid triggers",medium
-Diabetes,chronic,"increased thirst, frequent urination, fatigue, blurred vision","Chronic condition affecting how body processes blood sugar","Insulin, oral medications, diet control","Healthy diet, regular exercise, weight management",high
-Hypertension,chronic,"headaches, shortness of breath, nosebleeds, dizziness","High blood pressure condition","Blood pressure medication, lifestyle changes","Low-salt diet, regular exercise, stress management",high
-Anxiety,mental,"excessive worry, restlessness, difficulty concentrating, irritability","Mental health disorder characterized by excessive anxiety","Therapy, medication, relaxation techniques","Regular exercise, mindfulness, adequate sleep",medium
-Depression,mental,"persistent sadness, loss of interest, fatigue, changes in appetite","Mood disorder causing persistent sadness and loss of interest","Therapy, antidepressants, lifestyle changes","Regular exercise, social support, healthy diet",medium
-Asthma,respiratory,"wheezing, shortness of breath, chest tightness, coughing","Chronic respiratory condition causing breathing difficulties","Inhalers, corticosteroids, avoiding triggers","Avoid allergens, regular medication",medium
-Bronchitis,respiratory,"cough with mucus, fatigue, shortness of breath, slight fever","Inflammation of the lining of bronchial tubes","Rest, fluids, cough medicine, humidifier","Avoid smoking, wash hands, get vaccinated",low
+Common Cold,Respiratory,"runny nose, sore throat, cough, congestion",Viral infection of the upper respiratory tract,"Rest, fluids, decongestants","Wash hands frequently, avoid close contact",low
+சளி (Common Cold),Respiratory,"மூக்கு ஒழுகுதல், தொண்டை வலி, இருமல்",மேல் சுவாசப் பாதையில் ஏற்படும் வைரஸ் தொற்று,"ஓய்வு, திரவ உணவுகள், ஆவி பிடித்தல்",கைகளை அடிக்கடி கழுவவும்,low
+सामान्य जुकाम,Respiratory,"बहती नाक, गले में खराश, खांसी",ऊपरी श्वसन पथ का वायरल संक्रमण,"आराम, तरल पदार्थ, डिकंजेस्टेंट्स","बार-बार हाथ धोएं, दूरी बनाए रखें",low
+Influenza (Flu),Respiratory,"fever, chills, muscle aches, fatigue","Viral infection that attacks the nose, throat, and lungs","Rest, fluids, antiviral drugs","Annual flu vaccine, hand hygiene",medium
+காய்ச்சல் (Flu),Respiratory,"காய்ச்சல், குளிர் நடுக்கம், உடல் வலி, சோர்வு",மூக்கு மற்றும் நுரையீரலை தாக்கும் வைரஸ் தொற்று,"ஓய்வு, நீர்ச்சத்து, காய்ச்சல் மருந்துகள்","தடுப்பூசி போடுதல், முகக்கவசம்",medium
+इन्फ्लुएंजा (फ्लू),Respiratory,"बुखार, ठंड लगना, मांसपेशियों में दर्द","नाक, गले और फेफड़ों पर हमला करने वाला वायरल संक्रमण","आराम, तरल पदार्थ, एंटीवायरल दवाएं","वार्षिक फ्लू का टीका, स्वच्छता",medium
+Dengue,Respiratory,"high fever, severe headache, pain behind eyes, joint pain",Mosquito-borne viral infection (Aedes mosquito),"Hydration, pain relievers (avoid aspirin), rest","Use mosquito nets, remove stagnant water",high
+டெங்கு (Dengue),Respiratory,"அதிவேக காய்ச்சல், தலைவலி, மூட்டு வலி",ஏடிஸ் கொசுக்களால் பரவும் வைரஸ் தொற்று,"நீர்ச்சத்து பராமரிப்பு, ஓய்வு, மருத்துவர் ஆலோசனை",கொசு வலை பயன்படுத்துதல்,high
+डेंगू (Dengue),Respiratory,"तेज़ बुखार, तेज़ सिरदर्द, जोड़ों में दर्द",मच्छरों से फैलने वाला वायरल संक्रमण,"हाइड्रेशन, दर्द निवारक, आराम","मच्छरदानी का प्रयोग करें, पानी जमा न होने दें",high
+COVID-19,Respiratory,"fever, dry cough, tiredness, loss of taste/smell",Infectious disease caused by the SARS-CoV-2 virus,"Isolation, oxygen support (if needed), antivirals","Vaccination, masking, social distancing",high
+கொரோனா (COVID-19),Respiratory,"காய்ச்சல், வறட்டு இருமல், சுவை/வாசனை இழப்பு",SARS-CoV-2 வைரஸால் ஏற்படும் தொற்று நோய்,"தனிமைப்படுத்துதல், மருத்துவர் சிகிச்சை","தடுப்பூசி, முகக்கவசம், சமூக இடைவெளி",high
+कोविड-19,Respiratory,"बुखार, सूखी खांसी, थकान, स्वाद/गंध की कमी",SARS-CoV-2 वायरस के कारण होने वाली बीमारी,"अलगाव, ऑक्सीजन सहायता, एंटीवायरल","टीकाकरण, मास्क पहनना, सामाजिक दूरी",high
+Tuberculosis (TB),Respiratory,"persistent cough (3+ weeks), chest pain, weight loss",Serious bacterial infection that mainly affects lungs,Long-term antibiotic course (6-9 months),"Complete the full drug course, wear masks",high
+காசநோய் (TB),Respiratory,"தொடர் இருமல், மார்பு வலி, உடல் எடை குறைதல்",நுரையீரலைப் பாதிக்கும் பாக்டீரியா தொற்று,தொடர் மருந்துகள் (DOTS சிகிச்சை),மருந்துகளைத் தவறாமல் உட்கொள்ளவும்,high
+तपेदिक (टीबी),Respiratory,"लगातार खांसी, सीने में दर्द, वजन कम होना",फेफड़ों को प्रभावित करने वाला गंभीर बैक्टीरिया संक्रमण,लंबे समय तक एंटीबायोटिक कोर्स,"दवा का कोर्स पूरा करें, मास्क पहनें",high
+Pneumonia,Respiratory,"cough with phlegm, fever, shortness of breath",Infection that inflames the air sacs in the lungs,"Antibiotics, cough medicine, fever reducers","Pneumococcal vaccine, avoid smoking",high
+நிமோனியா,Respiratory,"சளியுடன் கூடிய இருமல், காய்ச்சல், மூச்சுத்திணறல்",நுரையீரல் காற்றுப் பைகளில் ஏற்படும் தொற்று,"ஆன்டிபயாடிக் மருந்துகள், ஓய்வு","தடுப்பூசி, புகைப்பிடித்தலைத் தவிர்க்கவும்",high
+निमोनिया,Respiratory,"कफ वाली खांसी, बुखार, सांस लेने में तकलीफ",फेफड़ों में वायु थैलियों की सूजन वाला संक्रमण,"एंटीबायोटिक्स, खांसी की दवा","न्यूमोकोकल वैक्सीन, धूम्रपान से बचें",high
+Malaria,Infectious,"chills, high fever, sweating, headache",Parasitic disease spread by Anopheles mosquitoes,"Antimalarial drugs (Chloroquine), fluids","Use mosquito nets, wear long sleeves",high
+மலேரியா (Malaria),Infectious,"குளிர் நடுக்கம், அதிக காய்ச்சல், வியர்த்தல்",கொசுக்களால் பரவும் ஒட்டுண்ணி நோய்,"மலேரியா எதிர்ப்பு மருந்துகள், நீர்ச்சத்து",கொசு வலைகளைப் பயன்படுத்தவும்,high
+मलेरिया,Infectious,"ठंड लगना, तेज़ बुखार, पसीना आना",मच्छरों से फैलने वाली परजीवी बीमारी,"एंटी-मलेरिया दवाएं, तरल पदार्थ",मच्छरदानी का प्रयोग करें,high
+Jaundice,Digestive,"yellow skin, yellow eyes, dark urine, pale stool",Yellowing of skin due to high bilirubin levels,"Liver rest, hydration, light diet","Avoid oily food, drink purified water",medium
+மஞ்சள் காமாலை (Jaundice),Digestive,"மஞ்சள் நிற கண்கள், சிறுநீர், உடல் சோர்வு",இரத்தத்தில் பிலிரூபின் அதிகரிப்பதால் ஏற்படும் நிலை,"கல்லீரல் ஓய்வு, எளிமையான உணவு",எண்ணெய் உணவுகளைத் தவிர்க்கவும்,medium
+पीलिया (Jaundice),Digestive,"पीली त्वचा, पीली आँखें, गहरा पेशाब",बिलीरुबिन के उच्च स्तर के कारण त्वचा का पीला होना,"आराम, हाइड्रेशन, हल्का आहार","तले हुए भोजन से बचें, साफ पानी पिएं",medium
+Typhoid,Digestive,"sustained fever, stomach pain, diarrhea or constipation",Bacterial infection caused by Salmonella typhi,"Antibiotics, plenty of fluids, soft food","Eat hot cooked food, wash hands",high
+டைபாய்டு (Typhoid),Digestive,"தொடர் காய்ச்சல், வயிற்று வலி, சோர்வு",சால்மோனெல்லா பாக்டீரியாவால் ஏற்படும் தொற்று,"ஆன்டிபயாடிக், அதிக திரவ உணவுகள்",சுத்தமான உணவு மற்றும் குடிநீர்,high
+टाइफाइड,Digestive,"लगातार बुखार, पेट दर्द, दस्त या कब्ज",साल्मोनेला बैक्टीरिया के कारण होने वाला संक्रमण,"एंटीबायोटिक्स, पर्याप्त तरल पदार्थ","गर्म खाना खाएं, हाथ धोएं",high
+Chickenpox,Skin,"itchy red blisters, fever, fatigue, headache",Highly contagious viral infection (Varicella-zoster),"Calamine lotion, cool baths, fever reducers","Isolate the patient, get vaccinated",medium
+சின்னம்மை (Chickenpox),Skin,"அரிப்புடன் கூடிய கொப்புளங்கள், காய்ச்சல், சோர்வு",வைரஸ் தொற்றால் ஏற்படும் தோல் நோய்,"கலமைன் லோஷன், ஓய்வு, வேப்பிலை","தனிமைப்படுத்துதல், தடுப்பூசி",medium
+चेचक (Chickenpox),Skin,"खुजली वाले लाल छाले, बुखार, थकान",अत्यधिक संक्रामक वायरल संक्रमण,"कैलामाइन लोशन, आराम, बुखार की दवा","मरीज को अलग रखें, टीकाकरण करवाएं",medium
+Ringworm,Skin,"circular red rash, itching, scaly skin",Fungal infection of the skin or scalp,Antifungal creams or powders,"Keep skin dry, don't share towels",low
+படைத் தாமரை (Ringworm),Skin,"வட்ட வடிவ தழும்புகள், அரிப்பு, செதில் போன்ற தோல்",தோலில் ஏற்படும் பூஞ்சை தொற்று,"பூஞ்சை எதிர்ப்பு கிரீம்கள், தூய்மை",சுய சுத்தத்தை பேணவும்,low
+दाद (Ringworm),Skin,"गोलाकार लाल चकत्ते, खुजली, पपड़ीदार त्वचा",त्वचा का फंगल संक्रमण,एंटीफंगल क्रीम या पाउडर,"त्वचा को सूखा रखें, तौलिया साझा न करें",low
+Tuberculosis,Infectious,"Cough, weight loss, night sweats",Bacterial lung infection,Antibiotics for 6-9 months,"Masks, BCG vaccine, isolation",High
+காசநோய் (Tuberculosis),Infectious,"தொடர் இருமல், எடை குறைவு",நுரையீரல் பாதிப்பு,6-9 மாத ஆன்டிபயாடிக்,"முகக்கவசம், தடுப்பூசி",High
+क्षय रोग (Tuberculosis),Infectious,"खांसी, वजन कम होना, पसीना",फेफड़ों का संक्रमण,एंटीबायोटिक्स कोर्स,"मास्क, टीकाकरण",High
+Cataract,Vision,"Cloudy vision, night blindness",Lens clouding,Surgery,"Sunglasses, eye exams",Low
+பார்வை குறைபாடு (Cataract),Vision,மங்கலான பார்வை,கண் லென்ஸ் பாதிப்பு,அறுவை சிகிச்சை,குளிர் கண்ணாடி,Low
+मोतियाबिंद (Cataract),Vision,धुंधली दृष्टि,आंख के लेंस का धुंधलापन,सर्जरी,धूप का चश्मा,Low
+Bipolar Disorder,Mental,"Mood swings, mania, depression",Brain disorder affecting mood,"Therapy, Mood stabilizers","Regular sleep, avoid stress",Medium
+இருமுனை மனநோய் (Bipolar),Mental,மனநிலை மாற்றம்,மனநல பாதிப்பு,"ஆலோசனை, மருந்துகள்","ஓய்வு, தியானம்",Medium
+द्विध्रुवी विकार (Bipolar),Mental,"मिजाज बदलना, उत्साह, अवसाद",मानसिक विकार,"थेरेपी, दवाएं",तनाव से बचें,Medium
+Celiac Disease,Autoimmune,"Bloating, diarrhea, fatigue",Gluten intolerance,Gluten-free diet,Check food labels,Medium
+செலியாக் நோய்,Autoimmune,"வயிற்று உப்புசம், வயிற்றுப்போக்கு",குளுட்டன் ஒவ்வாமை,குளுட்டன் இல்லாத உணவு,உணவு கட்டுப்பாடு,Medium
+सीलिएक रोग,Autoimmune,"पेट फूलना, दस्त, थकान",ग्लूटेन के प्रति संवेदनशीलता,ग्लूटेन मुक्त आहार,खाद्य लेबल की जाँच करें,Medium
+Breast Cancer,Oncology,"Lump in breast, skin changes",Cancer forming in breast cells,"Surgery, Chemo, Radiation","Regular screening, self-exams",High
+மார்பக புற்றுநோய்,Oncology,"மார்பகக் கட்டி, தோல் மாற்றம்",மார்பக செல்கள் பாதிப்பு,"அறுவை சிகிச்சை, கதிர்வீச்சு","சுய பரிசோதனை, ஸ்கிரீனிங்",High
+स्तन कैंसर,Oncology,"स्तन में गांठ, त्वचा में बदलाव",स्तन कोशिकाओं का कैंसर,"सर्जरी, कीमोथेरेपी","नियमित जांच, स्वयं परीक्षण",High
+Down Syndrome,Genetic,"Delayed development, distinct facial features",Genetic chromosome 21 disorder,Physical and speech therapy,Prenatal screening,Medium
+டவுன் சிண்ட்ரோம்,Genetic,"வளர்ச்சி தாமதம், முக மாற்றங்கள்",மரபணு கோளாறு (குரோமோசோம் 21),பயிற்சி மற்றும் சிகிச்சை,கருக்கால பரிசோதனை,Medium
+डाउन सिंड्रोम,Genetic,"विकासात्मक देरी, विशिष्ट चेहरे की विशेषताएं",आनुवंशिक गुणसूत्र 21 विकार,थेरेपी और विशेष देखभाल,प्रसव पूर्व जांच,Medium
+Rickets,Nutritional,"Bowed legs, bone pain, weak muscles",Vitamin D deficiency in children,Vitamin D and Calcium supplements,"Sunlight exposure, fortified food",Medium
+ரிக்கெட்ஸ் (எலும்புருக்கி நோய்),Nutritional,"வளைந்த கால்கள், எலும்பு வலி",வைட்டமின் D குறைபாடு,"வைட்டமின் D, கால்சியம்","சூரிய ஒளி, சத்தான உணவு",Medium
+सूखा रोग (Rickets),Nutritional,"मुड़ी हुई टांगें, हड्डियों में दर्द",विटामिन D की कमी,विटामिन D और कैल्शियम,"धूप का सेवन, अच्छा खान-पान",Medium
+Hemophilia,Genetic,"Excessive bleeding, easy bruising",Blood doesn't clot normally,Clotting factor replacement,"Avoid injury, avoid blood thinners",High
+ஹீமோபிலியா (ரத்த உறையாமை),Genetic,"அதிக ரத்தப்போக்கு, ரத்தக் கட்டு",ரத்தம் உறையாமை கோளாறு,உறைதல் காரணி சிகிச்சை,காயங்களைத் தவிர்த்தல்,High
+हीमोफीलिया,Genetic,"अत्यधिक रक्तस्राव, चोट के निशान",रक्त का थक्का न जमना,क्लॉटिंग फैक्टर रिप्लेसमेंट,चोट से बचें,High
+Vitiligo,Skin,"Loss of skin pigment, white patches",Immune system destroys melanocytes,"Topical creams, light therapy",Sun protection,Low
+வெண்புள்ளி (Vitiligo),Skin,"தோல் நிறமி இழப்பு, வெள்ளை தழும்புகள்",மெலனோசைட்டுகள் பாதிப்பு,"பூச்சு மருந்துகள், ஒளி சிகிச்சை",வெயிலிலிருந்து பாதுகாப்பு,Low
+सफेद दाग (Vitiligo),Skin,"त्वचा का रंग उड़ना, सफेद धब्बे",मेलेनोसाइट्स का नष्ट होना,"क्रीम, लाइट थेरेपी",धूप से बचाव,Low
+Multiple Sclerosis,Neurological,"Numbness, vision loss, fatigue",Immune system eats away at nerve covers,"Immunosuppressants, Physical therapy","Manage stress, avoid heat",High
+மல்டிபிள் ஸ்களீரோசிஸ்,Neurological,"மரத்துப்போதல், பார்வை இழப்பு",நரம்பு மண்டல பாதிப்பு,"மருந்துகள், உடற்பயிற்சி",மன அழுத்தம் தவிர்த்தல்,High
+मल्टीपल स्केलेरोसिस,Neurological,"सुन्नता, दृष्टि हानि, थकान",तंत्रिका तंत्र की क्षति,"इम्यूनोसप्रेसेन्ट, थेरेपी",तनाव प्रबंधन,High
+Beri Beri,Nutritional,"Weakness, swollen feet, shortness of breath",Vitamin B1 (Thiamine) deficiency,Thiamine supplements,Eat whole grains and legumes,Medium
+பெரி பெரி,Nutritional,"பலவீனம், கால் வீக்கம்",வைட்டமின் B1 குறைபாடு,தயமின் மாத்திரைகள்,முழு தானியங்கள் உண்ணுதல்,Medium
+बेरी बेरी,Nutritional,"कमजोरी, पैरों में सूजन",विटामिन B1 (थायमिन) की कमी,थायमिन सप्लीमेंट,साबुत अनाज खाएं,Medium
+Malaria,Infectious,"Fever, chills, headache",Parasite spread by mosquitoes,Antimalarial drugs,"Mosquito nets, repellents",High
+மலேரியா,Infectious,"குளிர் காய்ச்சல், தலைவலி",கொசுக்களால் பரவும் ஒட்டுண்ணி,மருந்து சிகிச்சை,கொசு வலை பயன்படுத்துதல்,High
+मलेरिया,Infectious,"बुखार, ठंड लगना, सिरदर्द",मच्छरों से फैलने वाला परजीवी,मलेरिया रोधी दवाएं,मच्छरदानी का प्रयोग,High
+Depression,Mental,"persistent sadness, fatigue, loss of interest",Mood disorder affecting daily life,"Therapy, Antidepressants, lifestyle changes","Seek social support, regular exercise",medium
+மனச்சோர்வு (Depression),Mental,"தொடர் சோகம், சோர்வு, ஆர்வமின்மை",மனநிலை பாதிப்பு,"ஆலோசனை, மருந்துகள்","தொடர் உடற்பயிற்சி, சமூக ஆதரவு",medium
+अवसाद (Depression),Mental,"लगातार उदासी, थकान, रुचि की कमी",मूड विकार जो दैनिक जीवन को प्रभावित करता है,"थेरेपी, एंटीडिप्रेसेंट","सामाजिक सहायता लें, व्यायाम",medium
+Schizophrenia,Mental,"hallucinations, delusions, flat affect",Severe brain disorder affecting reality,"Antipsychotics, therapy, rehab",Strict medication adherence,high
+மனச்சிதைவு நோய்,Mental,"மாயத்தோற்றம், பிரமைகள்",மூளை செயல்பாட்டு குறைபாடு,"மனநல சிகிச்சை, மருந்துகள்",மருந்துகளைத் தவிர்க்கக்கூடாது,high
+सिज़ोफ्रेनिया,Mental,"मतिभ्रम, भ्रम, वास्तविकता से कटना",गंभीर मस्तिष्क विकार,"एंटीसाइकोटिक्स, थेरेपी",दवा का सख्ती से पालन,high
+Measles,Pediatric,"fever, red rash, dry cough, sore throat",Highly contagious viral infection,"Rest, fluids, Vitamin A","MMR Vaccination, isolation",medium
+தட்டம்மை (Measles),Pediatric,"காய்ச்சல், சிவப்பு தடிப்புகள், இருமல்",வைரஸ் தொற்று,"ஓய்வு, திரவ உணவுகள், வைட்டமின் A",தடுப்பூசி போடுதல்,medium
+खसरा (Measles),Pediatric,"बुखार, लाल चकत्ते, सूखी खांसी",अत्यधिक संक्रामक वायरल संक्रमण,"आराम, तरल पदार्थ, विटामिन A","MMR टीकाकरण, अलगाव",medium
+Chickenpox,Pediatric,"itchy blisters, fever, fatigue",Varicella-zoster virus infection,"Calamine lotion, rest, antivirals","Vaccination, avoid scratching",low
+சின்னம்மை (Chickenpox),Pediatric,"அரிப்புடன் கூடிய கொப்புளங்கள், காய்ச்சல்",வைரஸ் தொற்று (Varicella),"கலமைன் லோஷன், ஓய்வு","தடுப்பூசி, சுத்தமாக இருத்தல்",low
+छोटी माता (Chickenpox),Pediatric,"खुजली वाले छाले, बुखार, थकान",वेरिसेला-जोस्टर वायरस संक्रमण,"कैलामाइन लोशन, आराम","टीकाकरण, खुजली से बचें",low
+Heart Attack,Cardiovascular,"chest pain, shortness of breath, nausea",Blood flow blockage to heart muscle,"Aspirin, surgery, lifestyle changes","Monitor BP, quit smoking",high
+மாரடைப்பு (Heart Attack),Cardiovascular,"மார்பு வலி, மூச்சுத்திணறல், குமட்டல்",இதய தசைகளுக்கு ரத்த ஓட்டம் தடைபடுதல்,"அவசர சிகிச்சை, ஆஸ்பிரின்",புகைப்பிடித்தலை தவிர்க்கவும்,high
+दिल का दौरा (Heart Attack),Cardiovascular,"सीने में दर्द, सांस की तकलीफ, मतली",हृदय की मांसपेशियों में रक्त प्रवाह रुकना,"सर्जरी, एस्पिरिन, जीवनशैली बदलाव","बीपी की निगरानी, धूम्रपान छोड़ें",high
+Whooping Cough,Pediatric,"severe hacking cough, runny nose",Bacterial respiratory infection,"Antibiotics, fluids, humidifier","DTaP vaccine, avoid irritants",medium
+கக்குவான் இருமல்,Pediatric,"கடுமையான இருமல், மூச்சுத்திணறல்",பாக்டீரியா சுவாச தொற்று,"ஆன்டிபயாடிக், திரவ உணவுகள்",தடுப்பூசி (DTaP),medium
+काली खांसी,Pediatric,"लगातार खांसी, बहती नाक",बैक्टीरिया श्वसन संक्रमण,"एंटीबायोटिक्स, ह्यूमिडिफायर","DTaP टीका, जलन से बचें",medium
+Obsessive Compulsive Disorder (OCD),Mental,"repetitive thoughts, ritual behaviors",Anxiety disorder causing compulsions,"CBT therapy, SSRI medication","Stress management, support groups",medium
+கட்டாய மனவேதனை நோய் (OCD),Mental,மீண்டும் மீண்டும் வரும் எண்ணங்கள்,மன உளைச்சல் நோய்,"நடத்தை சிகிச்சை, மருந்துகள்",மன அழுத்தத்தை குறைத்தல்,medium
+ओसीडी (OCD),Mental,"बार-बार आने वाले विचार, अनुष्ठानिक व्यवहार",जुनूनी बाध्यकारी विकार,"सीबीटी थेरेपी, दवाएं",तनाव प्रबंधन,medium
+Anorexia Nervosa,Mental,"extreme weight loss, fear of gaining weight",Serious eating disorder,"Nutrition counseling, therapy",Healthy body image focus,high
+அனோரெக்ஸியா,Mental,"அதீத எடை குறைவு, உணவு தவிர்த்தல்",உணவு முறை கோளாறு,"சத்துணவு ஆலோசனை, சிகிச்சை",சத்தான உணவு பழக்கம்,high
+एनोरेक्सिया नर्वोसा,Mental,"अत्यधिक वजन कम होना, वजन बढ़ने का डर",गंभीर खाने का विकार,"पोषण परामर्श, थेरेपी",स्वस्थ शरीर की छवि पर ध्यान,high
+Autism Spectrum Disorder,Pediatric,"social challenges, repetitive behaviors",Developmental disability,"Speech therapy, behavioral therapy",Early intervention and support,medium
+ஆட்டிசம்,Pediatric,சமூக தொடர்பு சிக்கல்கள்,வளர்ச்சி குறைபாடு,"பேச்சுப் பயிற்சி, நடத்தை சிகிச்சை",ஆரம்பகால ஆதரவு,medium
+ऑटिज्म (Autism),Pediatric,"सामाजिक चुनौतियां, दोहराव वाला व्यवहार",विकासात्मक विकलांगता,"स्पीच थेरेपी, व्यवहार थेरेपी",जल्द हस्तक्षेप और समर्थन,medium
+Breast Cancer,Oncology,"lump in breast, skin dimpling, nipple discharge",Cancer that forms in the cells of the breasts,"Surgery, radiation, chemotherapy","Regular self-exams, mammograms",high
+மார்பக புற்றுநோய்,Oncology,"மார்பகக் கட்டி, தோல் மாற்றம்",மார்பக செல்களில் ஏற்படும் புற்றுநோய்,"அறுவை சிகிச்சை, கதிர்வீச்சு","சுய பரிசோதனை, ஸ்கிரீனிங்",high
+स्तन कैंसर,Oncology,"स्तन में गांठ, त्वचा में बदलाव",स्तन की कोशिकाओं में होने वाला कैंसर,"सर्जरी, कीमोथेरेपी","नियमित जांच, मैमोग्राम",high
+Lung Cancer,Oncology,"chronic cough, chest pain, coughing blood",Cancer that begins in the lungs,"Surgery, chemo, targeted therapy","Avoid smoking, reduce radon exposure",high
+நுரையீரல் புற்றுநோய்,Oncology,"தொடர் இருமல், மார்பு வலி, ரத்த வாந்தி",நுரையீரலில் தொடங்கும் புற்றுநோய்,"கதிர்வீச்சு, வேதிச்சிகிச்சை",புகைப்பிடித்தலை தவிர்க்கவும்,high
+फेफड़ों का कैंसर,Oncology,"पुरानी खांसी, सीने में दर्द, खून की खांसी",फेफड़ों में शुरू होने वाला कैंसर,"कीमोथेरेपी, इम्यूनोथेरेपी",धूम्रपान से बचें,high
+Leukemia,Oncology,"frequent infections, fatigue, easy bruising",Cancer of blood-forming tissues,"Chemotherapy, stem cell transplant",Regular blood monitoring,high
+ரத்தப் புற்றுநோய் (Leukemia),Oncology,"அடிக்கடி தொற்று, சோர்வு, ரத்தக் கசிவு",ரத்த அணுக்களில் ஏற்படும் புற்றுநோய்,"வேதிச்சிகிச்சை, எலும்பு மஜ்ஜை மாற்று",ரத்தப் பரிசோதனை,high
+ल्यूकेमिया,Oncology,"बार-बार संक्रमण, थकान, नीला पड़ना",रक्त बनाने वाले ऊतकों का कैंसर,"कीमोथेरेपी, स्टेम सेल ट्रांसप्लांट",नियमित रक्त जांच,high
+Asbestosis,Occupational,"shortness of breath, persistent cough",Lung disease caused by inhaling asbestos fibers,"Oxygen therapy, pulmonary rehab",Use protective gear at work,medium
+அஸ்பெஸ்டோசிஸ்,Occupational,"மூச்சுத்திணறல், தொடர் இருமல்",அஸ்பெஸ்டாஸ் துகள்களால் வரும் நுரையீரல் நோய்,"ஆக்ஸிஜன் சிகிச்சை, பயிற்சி",பாதுகாப்பு கவசம் அணிதல்,medium
+एस्बेस्टोसिस,Occupational,"सांस की तकलीफ, लगातार खांसी",एस्बेस्टस फाइबर के कारण फेफड़ों की बीमारी,"ऑक्सीजन थेरेपी, पुनर्वास",काम पर सुरक्षा उपकरण पहनें,medium
+Silicosis,Occupational,"cough, fever, bluish skin (cyanosis)",Lung fibrosis caused by silica dust,"Cough suppressants, oxygen",Ensure proper ventilation at work,high
+சிலிகோசிஸ்,Occupational,"இருமல், காய்ச்சல், தோல் நீலமாதல்",சிலிக்கா துகள்களால் வரும் நுரையீரல் பாதிப்பு,"நிவாரண மருந்துகள், ஆக்ஸிஜன்",வேலை இடத்தில் காற்றோட்டம்,high
+सिलिकोसिस,Occupational,"खांसी, बुखार, त्वचा का नीला पड़ना",सिलिका धूल के कारण फेफड़ों का फाइब्रोसिस,"खांसी की दवाएं, ऑक्सीजन",उचित वेंटिलेशन सुनिश्चित करें,high
+Melanoma,Oncology,"new unusual mole, changes in existing mole",The most serious type of skin cancer,"Surgery, immunotherapy, cream","Apply sunscreen, avoid UV rays",high
+மெலனோமா,Oncology,"புதிய மச்சம், மச்சத்தில் மாற்றம்",தீவிரமான தோல் புற்றுநோய்,"அறுவை சிகிச்சை, இம்யூனோதெரபி",சன்ஸ்கிரீன் பயன்படுத்துதல்,high
+मेलानोमा,Oncology,"असामान्य तिल, मौजूदा तिल में बदलाव",त्वचा कैंसर का सबसे गंभीर प्रकार,"सर्जरी, इम्यूनोथेरेपी","सनस्क्रीन लगाएं, यूवी किरणों से बचें",high
+Prostate Cancer,Oncology,"trouble urinating, blood in semen",Cancer in a man's prostate gland,"Radiation, hormone therapy, surgery",Early screening for men over 50,high
+புரோஸ்டேட் புற்றுநோய்,Oncology,"சிறுநீர் கழிப்பதில் சிரமம், ரத்தம்",புரோஸ்டேட் சுரப்பியில் புற்றுநோய்,"கதிர்வீச்சு, ஹார்மோன் சிகிச்சை",ஆரம்பகால பரிசோதனை,high
+प्रोस्टेट कैंसर,Oncology,"पेशाब में कठिनाई, वीर्य में रक्त",प्रोस्टेट ग्रंथि का कैंसर,"विकिरण, हार्मोन थेरेपी",50 के बाद नियमित जांच,high
+Leukemia,Oncology,"fever, persistent fatigue, easy bleeding, bruising",Cancer of the body's blood-forming tissues,"Chemotherapy, radiation, stem cell transplant","Avoid infections, regular blood monitoring",high
+ரத்தப் புற்றுநோய் (Leukemia),Oncology,"காய்ச்சல், சோர்வு, ரத்தக் கசிவு, தழும்புகள்",ரத்த அணுக்களை உருவாக்கும் திசுக்களில் வரும் புற்றுநோய்,"வேதிச்சிகிச்சை, கதிர்வீச்சு, மஜ்ஜை மாற்று",தொற்றுநோயைத் தவிர்க்கவும்,high
+ल्यूकेमिया (Leukemia),Oncology,"बुखार, लगातार थकान, आसानी से रक्तस्राव",रक्त बनाने वाले ऊतकों का कैंसर,"कीमोथेरेपी, विकिरण, स्टेम सेल ट्रांसप्लांट","संक्रमण से बचें, नियमित जांच",high
+Sickle Cell Anemia,Hematology,"pain episodes, swelling of hands and feet, fatigue",Inherited red blood cell disorder affecting oxygen flow,"Blood transfusions, bone marrow transplant, meds","Stay hydrated, avoid extreme temperatures",high
+சிக்கிள் செல் ரத்த சோகை,Hematology,"உடல் வலி, கை கால் வீக்கம், அதிக சோர்வு",அரிவாள் வடிவில் ரத்த அணுக்கள் மாறும் மரபணு நோய்,"ரத்த தானம், எலும்பு மஜ்ஜை மாற்று சிகிச்சை",நிறைய நீர் அருந்தவும்,high
+सिकल सेल एनीमिया,Hematology,"दर्द के दौरे, हाथ-पैरों में सूजन, थकान",वंशानुगत लाल रक्त कोशिका विकार,"रक्त आधान, स्टेम सेल प्रत्यारोपण","हाइड्रेटेड रहें, अत्यधिक तापमान से बचें",high
+Breast Cancer,Oncology,"lump in breast, changes in skin texture, nipple discharge",Cancer that forms in the cells of the breasts,"Surgery, radiation, chemotherapy, hormone therapy","Monthly self-exams, regular mammograms",high
+மார்பக புற்றுநோய்,Oncology,"மார்பகக் கட்டி, தோல் மாற்றம், திரவக் கசிவு",மார்பக செல்களில் ஏற்படும் புற்றுநோய் பாதிப்பு,"அறுவை சிகிச்சை, கதிர்வீச்சு, வேதிச்சிகிச்சை","சுய பரிசோதனை, முறையான ஸ்கிரீனிங்",high
+स्तन कैंसर (Breast Cancer),Oncology,"स्तन में गांठ, त्वचा में बदलाव, स्राव",स्तन की कोशिकाओं में होने वाला कैंसर,"सर्जरी, विकिरण, कीमोथेरेपी","मासिक स्व-जांच, नियमित मैमोग्राम",high
+Hemophilia,Hematology,"excessive bleeding from cuts, deep bruises, joint pain",Rare disorder in which blood doesn't clot normally,Injections of clotting factor or plasma,"Avoid injury-prone activities, soft toothbrushes",high
+ஹீமோபிலியா (Hemophilia),Hematology,"அதிக ரத்தப்போக்கு, நீல நிறத் தழும்புகள், மூட்டு வலி",ரத்தம் உறைதலில் ஏற்படும் மரபணு குறைபாடு,உறைதல் காரணி ஊசி சிகிச்சை,காயங்கள் ஏற்படாமல் கவனமாக இருக்கவும்,high
+हीमोफीलिया (Hemophilia),Hematology,"अत्यधिक रक्तस्राव, गहरे घाव, जोड़ों का दर्द",रक्त का थक्का न जमने वाला विकार,क्लॉटिंग फैक्टर इंजेक्शन,"चोट से बचें, कोमल टूथब्रश का प्रयोग करें",high
+Lung Cancer,Oncology,"new cough that doesn't go away, coughing blood, chest pain",Cancer that begins in the lungs and can spread,"Surgery, chemotherapy, targeted drug therapy","Quit smoking, avoid secondhand smoke",high
+நுரையீரல் புற்றுநோய்,Oncology,"தொடர் இருமல், ரத்த வாந்தி, மூச்சுத்திணறல்",நுரையீரலில் ஆரம்பிக்கும் புற்றுநோய் பாதிப்பு,"அறுவை சிகிச்சை, வேதிச்சிகிச்சை",புகைப்பிடிப்பதை முற்றிலும் தவிர்க்கவும்,high
+फेफड़ों का कैंसर,Oncology,"पुरानी खांसी, खून की खांसी, सीने में दर्द",फेफड़ों में शुरू होने वाला कैंसर,"सर्जरी, कीमोथेरेपी, लक्षित थेरेपी","धूम्रपान छोड़ें, धुएं से बचें",high
+Thalassemia,Hematology,"pale skin, slow growth, dark urine, fatigue",Inherited blood disorder with less hemoglobin than normal,"Blood transfusions, iron chelation therapy","Genetic counseling, folic acid supplements",high
+தலசீமியா (Thalassemia),Hematology,"வெளிறிய தோல், மெதுவான வளர்ச்சி, கருமையான சிறுநீர்",ஹீமோகுளோபின் குறைபாட்டால் வரும் மரபணு நோய்,"தொடர் ரத்த தானம் பெறுதல், இரும்புச்சத்து நீக்கம்",மரபணு ஆலோசனை பெறவும்,high
+थैलेसीमिया (Thalassemia),Hematology,"पीली त्वचा, धीमी वृद्धि, गहरा मूत्र",हीमोग्लोबिन की कमी वाला आनुवंशिक विकार,"रक्त आधान, आयरन चीलेशन थेरेपी","आनुवंशिक परामर्श, फोलिक एसिड लें",high
+Prostate Cancer,Oncology,"trouble urinating, blood in urine, bone pain",Cancer in a man's prostate gland,"Watchful waiting, surgery, radiation",PSA testing for men over 50,high
+புரோஸ்டேட் புற்றுநோய்,Oncology,"சிறுநீர் கழிப்பதில் சிக்கல், சிறுநீரில் ரத்தம்",ஆண்களின் புரோஸ்டேட் சுரப்பியில் வரும் புற்றுநோய்,"அறுவை சிகிச்சை, கதிர்வீச்சு, ஹார்மோன் சிகிச்சை",50 வயதுக்கு மேல் பிஎஸ்ஏ பரிசோதனை,high
+प्रोस्टेट कैंसर,Oncology,"पेशाब में कठिनाई, मूत्र में रक्त, हड्डियों में दर्द",पुरुषों की प्रोस्टेट ग्रंथि का कैंसर,"सर्जरी, विकिरण, हार्मोन थेरेपी",50 के बाद पीएसए जांच कराएं,high
+Sinusitis,ENT,"nasal congestion, headache, facial pain, thick mucus",Inflammation or swelling of the tissue lining the sinuses,"Saline nasal spray, decongestants, antibiotics","Avoid allergens, use a humidifier",low
+சைனசிடிஸ் (Sinusitis),ENT,"மூக்கடைப்பு, தலைவலி, முகத்தில் வலி",சைனஸ் திசுக்களில் ஏற்படும் வீக்கம்,"மூக்கு தெளிப்பான், நீராவி பிடித்தல்",தூசி மற்றும் ஒவ்வாமையைத் தவிர்க்கவும்,low
+साइनसाइटिस (Sinusitis),ENT,"नाक बंद होना, सिरदर्द, चेहरे का दर्द",साइनस की परतों में सूजन,"नाक स्प्रे, डिकंजेस्टेंट्स, भाप लेना","एलर्जी से बचें, ह्यूमिडिफायर का उपयोग करें",low
+PCOS (Polycystic Ovary Syndrome),Reproductive,"irregular periods, acne, excess hair growth, weight gain",Hormonal disorder causing enlarged ovaries with small cysts,"Lifestyle changes, birth control pills, metformin","Maintain healthy weight, regular exercise",medium
+பிசிஓஎஸ் (PCOS),Reproductive,"சீரற்ற மாதவிடாய், முகப்பரு, உடல் எடை அதிகரிப்பு",ஹார்மோன் குறைபாட்டால் கருப்பையில் ஏற்படும் கட்டிகள்,"வாழ்க்கை முறை மாற்றம், உடற்பயிற்சி","சத்தான உணவு, உடல் எடை கட்டுப்பாடு",medium
+पीसीओएस (PCOS),Reproductive,"अनियमित पीरियड्स, मुँहासे, बालों का अधिक बढ़ना",हार्मोनल विकार जिसके कारण अंडाशय में गांठें हो जाती हैं,"जीवनशैली में बदलाव, दवाएं, व्यायाम","स्वस्थ वजन बनाए रखें, नियमित व्यायाम",medium
+Tinnitus,ENT,ringing or buzzing noise in ears,Perception of noise or ringing in the ears,"Treating underlying cause, noise suppression","Avoid loud noises, use ear protection",low
+டின்னிடஸ் (Tinnitus),ENT,காதில் இரைச்சல் அல்லது சத்தம் கேட்டல்,காதிற்குள் தேவையற்ற சத்தம் கேட்கும் உணர்வு,"அடிப்படை காரணத்திற்கான சிகிச்சை, அமைதி",அதிக சத்தத்தைத் தவிர்க்கவும்,low
+टिनिटस (Tinnitus),ENT,कानों में बजने या भिनभिनाने की आवाज,कानों में शोर या बजने की अनुभूति,"अंतर्निहित कारण का इलाज, शोर दमन","तेज शोर से बचें, कान की सुरक्षा करें",low
+Endometriosis,Reproductive,"painful periods, chronic pelvic pain, infertility",Tissue similar to uterine lining grows outside uterus,"Pain meds, hormone therapy, surgery","Early diagnosis, regular pelvic exams",high
+எண்டோமெட்ரியோசிஸ்,Reproductive,"மாதவிடாய் வலி, இடுப்பு வலி, கருவுறுதல் சிக்கல்",கருப்பை திசுக்கள் கருப்பைக்கு வெளியே வளருதல்,"வலி நிவாரணிகள், ஹார்மோன் சிகிச்சை",முறையான மருத்துவ பரிசோதனை,high
+एंडोमेट्रियोसिस,Reproductive,"दर्दनाक पीरियड्स, श्रोणि में दर्द, बांझपन",गर्भाशय की परत के समान ऊतक का बाहर बढ़ना,"दर्द निवारक, हार्मोन थेरेपी, सर्जरी",नियमित जांच कराएं,high
+Tonsillitis,ENT,"sore throat, difficulty swallowing, swollen tonsils",Inflammation of the two oval-shaped pads of tissue at the back of the throat,"Gargling, rest, antibiotics, tonsillectomy","Avoid cold drinks, maintain oral hygiene",low
+டான்சில்லிடிஸ்,ENT,"தொண்டை வலி, விழுங்குவதில் சிரமம், வீக்கம்",தொண்டையில் உள்ள திசுப்படல வீக்கம்,"உப்பு நீர் கொப்பளித்தல், மருந்துகள்",குளிர்ந்த உணவுகளைத் தவிர்க்கவும்,low
+टॉन्सिलाइटिस,ENT,"गले में खराश, निगलने में कठिनाई, टॉन्सिल में सूजन",गले के पीछे के ऊतकों में सूजन,"गरारे करना, आराम, एंटीबायोटिक्स","ठंडे पेय से बचें, स्वच्छता बनाए रखें",low
+Uterine Fibroids,Reproductive,"heavy menstrual bleeding, pelvic pressure, frequent urination",Noncancerous growths of the uterus during childbearing years,"Medication, surgery (myomectomy), embolization",Regular gynecological checkups,medium
+கருப்பை நார்த்திசுக்கட்டிகள்,Reproductive,"அதிக ரத்தப்போக்கு, இடுப்பு அழுத்தம்",கருப்பையில் தோன்றும் புற்றுநோய் அல்லாத கட்டிகள்,"மருந்துகள், அறுவை சிகிச்சை",முறையான மருத்துவ ஆலோசனை,medium
+गर्भाशय फाइब्रॉएड,Reproductive,"भारी मासिक धर्म, श्रोणि दबाव, बार-बार पेशाब",गर्भाशय में होने वाली गैर-कैंसरयुक्त गांठें,"दवाएं, सर्जरी, एम्बोलिज़ेशन",नियमित स्त्री रोग संबंधी जांच कराएं,medium
+Otitis Media,ENT,"ear pain, fluid drainage, hearing loss","Infection of the middle ear, common in children","Antibiotics, ear drops, fluids","Avoid smoke exposure, treat colds early",low
+நடுச்செவி அழற்சி,ENT,"காது வலி, காதில் நீர் வடிதல், கேட்டல் குறைபாடு",நடுச்செவியில் ஏற்படும் தொற்று,"சொட்டு மருந்துகள், ஆன்டிபயாடிக்",காதுகளில் அழுக்கு சேராமல் பார்த்தல்,low
+ओटिटिस मीडिया,ENT,"कान दर्द, तरल पदार्थ निकलना, सुनने में कमी","मध्य कान का संक्रमण, बच्चों में आम","एंटीबायोटिक्स, इयर ड्रॉप्स","धुएं से बचें, जुकाम का जल्द इलाज करें",low
+Scurvy,Nutritional,"bleeding gums, weakness, skin spots",Disease caused by severe Vitamin C deficiency,"Vitamin C supplements, citrus fruits",Eat a diet rich in fruits and vegetables,medium
+ஸ்கர்வி (Scurvy),Nutritional,"ஈறு ரத்தக்கசிவு, பலவீனம், தோல் புள்ளிகள்",வைட்டமின் சி குறைபாட்டால் ஏற்படும் நோய்,"வைட்டமின் சி மாத்திரைகள், பழங்கள்",சத்தான பழங்களை உணவில் சேர்க்கவும்,medium
+स्कर्वी (Scurvy),Nutritional,"मसूड़ों से खून आना, कमजोरी, त्वचा पर धब्बे",विटामिन सी की गंभीर कमी से होने वाला रोग,"विटामिन सी सप्लीमेंट, खट्टे फल",फलों और सब्जियों से भरपूर आहार लें,medium
+Cystic Fibrosis,Genetic,"persistent cough, lung infections, salty skin",Genetic disorder affecting mucus and sweat glands,"Chest physical therapy, inhalers, meds",Avoid smoke and respiratory irritants,high
+சிஸ்டிக் ஃபைப்ரோஸிஸ்,Genetic,"தொடர் இருமல், நுரையீரல் தொற்று",சளி உற்பத்தியைப் பாதிக்கும் மரபணு நோய்,"பிசியோதெரபி, மருந்துகள், இன்ஹேலர்",புகை மற்றும் தூசியைத் தவிர்க்கவும்,high
+सिस्टिक फाइब्रोसिस,Genetic,"लगातार खांसी, फेफड़ों में संक्रमण",म्यूकस ग्रंथियों को प्रभावित करने वाला विकार,"चेस्ट फिजियोथेरेपी, इनहेलर",धुआं और धूल से बचें,high
+Night Blindness,Nutritional,difficulty seeing in low light or at night,Vision impairment caused by Vitamin A deficiency,"Vitamin A supplements, diet rich in carrots",Eat green leafy vegetables and carrots,low
+மாலைக்கண் நோய்,Nutritional,இரவில் மங்கலான பார்வை,வைட்டமின் ஏ குறைபாட்டால் ஏற்படும் கண் பாதிப்பு,"வைட்டமின் ஏ மருந்துகள், சத்தான உணவு",கீரை மற்றும் கேரட் அதிகம் சாப்பிடவும்,low
+रतौंधी (Night Blindness),Nutritional,कम रोशनी या रात में देखने में कठिनाई,विटामिन ए की कमी के कारण दृष्टि दोष,"विटामिन ए सप्लीमेंट, गाजर का सेवन",हरी पत्तेदार सब्जियां और गाजर खाएं,low
+Heat Stroke,Environmental,"high body temperature, confusion, rapid pulse",Body overheating due to prolonged exposure to sun,"Emergency cooling, fluids, shade","Stay hydrated, wear light clothing",high
+வெப்பத்தாக்கம் (Heat Stroke),Environmental,"உடல் சூடு அதிகரிப்பு, குழப்பம், வேகமான துடிப்பு",வெயிலில் அதிக நேரம் இருப்பதினால் ஏற்படும் பாதிப்பு,"குளிர்ச்சியான இடம், நீர்ச்சத்து பராமரிப்பு",நிறைய நீர் குடிக்கவும்,high
+लू लगना (Heat Stroke),Environmental,"शरीर का उच्च तापमान, भ्रम, तेज़ नाड़ी",धूप में अधिक समय रहने के कारण शरीर का गर्म होना,"ठंडी जगह पर आराम, तरल पदार्थ","हाइड्रेटेड रहें, हल्के कपड़े पहनें",high
+Down Syndrome,Genetic,"delayed development, distinct facial features",Genetic disorder caused by extra chromosome 21,"Speech therapy, physical therapy, support","Early intervention, regular health checkups",medium
+டவுன் சிண்ட்ரோம்,Genetic,"வளர்ச்சி தாமதம், முக அமைப்பில் மாற்றம்",குரோமோசோம் 21 மாற்றத்தால் ஏற்படும் மரபணு நோய்,"பேச்சுப் பயிற்சி, உடற்பயிற்சி சிகிச்சை",ஆரம்பகால மருத்துவ ஆதரவு,medium
+डाउन सिंड्रोम,Genetic,"विकासात्मक देरी, विशिष्ट चेहरे की विशेषताएं",अतिरिक्त गुणसूत्र 21 के कारण होने वाला विकार,"स्पीच थेरेपी, भौतिक चिकित्सा",जल्द हस्तक्षेप और नियमित जांच,medium
+Beriberi,Nutritional,"swelling, tingling, shortness of breath, weakness",Disease caused by Vitamin B1 (thiamine) deficiency,"Thiamine supplements, diet of whole grains",Eat unpolished rice and legumes,medium
+பெரிபெரி (Beriberi),Nutritional,"வீக்கம், பலவீனம், மூச்சுத்திணறல்",வைட்டமின் பி1 குறைபாட்டால் ஏற்படும் நோய்,"தயாம்பின் மாத்திரைகள், முழு தானியங்கள்",கைக்குத்தல் அரிசி மற்றும் பருப்பு உணவுகள்,medium
+बेरीबेरी (Beriberi),Nutritional,"सूजन, झुनझुनी, सांस की तकलीफ, कमजोरी",विटामिन बी1 (थायमिन) की कमी से होने वाला रोग,"थायमिन सप्लीमेंट, साबुत अनाज",बिना पॉलिश वाला चावल और दालें खाएं,medium
+Insomnia,Lifestyle,"difficulty falling or staying asleep, fatigue",Sleep disorder that can be acute or chronic,"Cognitive behavioral therapy, sleep hygiene","Maintain sleep schedule, limit caffeine",low
+தூக்கமின்மை (Insomnia),Lifestyle,"தூங்குவதில் சிரமம், சோர்வு",தூக்கம் வராமல் தவிக்கும் நிலை,"சரியான தூக்க பழக்கம், மனநல ஆலோசனை","காஃபின் தவிர்த்தல், தியானம்",low
+अनिद्रा (Insomnia),Lifestyle,"नींद आने में कठिनाई, थकान",नींद संबंधी विकार जो तीव्र या पुराना हो सकता है,"नींद की स्वच्छता, थेरेपी","नींद का समय तय करें, कैफीन सीमित करें",low
