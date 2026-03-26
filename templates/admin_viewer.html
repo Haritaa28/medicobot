@@ -1,52 +1,52 @@
 {% extends "layout.html" %}
 
-{% block title %}Admin Viewer - MedicoBot{% endblock %}
+{% block title %}Admin Viewer - HealthMate AI{% endblock %}
 
 {% block content %}
 <div class="viewer-container">
     <div class="viewer-header">
-        <h1><i class="fas fa-database"></i> Data Viewer</h1>
-        <p>View and manage system data</p>
+        <h1><i class="fas fa-database"></i> HealthMate Data Viewer</h1>
+        <p>View and manage system data for your AI medical assistant</p>
     </div>
 
     <!-- Tabs -->
     <div class="viewer-tabs">
-        <button class="tab-btn active" onclick="showTab('users')">Users</button>
-        <button class="tab-btn" onclick="showTab('predictions')">Predictions</button>
-        <button class="tab-btn" onclick="showTab('chats')">Chats</button>
-        <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+        <button class="tab-btn active" onclick="showTab('users')"><i class="fas fa-users"></i> Users</button>
+        <button class="tab-btn" onclick="showTab('predictions')"><i class="fas fa-diagnoses"></i> Predictions</button>
+        <button class="tab-btn" onclick="showTab('chats')"><i class="fas fa-comments"></i> Chats</button>
+        <button class="tab-btn" onclick="showTab('analytics')"><i class="fas fa-chart-bar"></i> Analytics</button>
     </div>
 
     <!-- Search and Filters -->
     <div class="viewer-controls">
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchData()">
+            <input type="text" id="searchInput" placeholder="Search users, symptoms, or conversations..." onkeyup="searchData()">
         </div>
         <div class="filter-controls">
             <select id="filterCategory" class="form-control" onchange="filterData()">
                 <option value="">All Categories</option>
-                <option value="skin">Skin</option>
-                <option value="fever">Fever</option>
+                <option value="skin">Skin Conditions</option>
+                <option value="fever">Fever & Infections</option>
                 <option value="respiratory">Respiratory</option>
-                <option value="mental">Mental</option>
-                <option value="chronic">Chronic</option>
+                <option value="mental">Mental Health</option>
+                <option value="chronic">Chronic Conditions</option>
             </select>
             <select id="filterLanguage" class="form-control" onchange="filterData()">
                 <option value="">All Languages</option>
                 <option value="en">English</option>
-                <option value="ta">Tamil</option>
-                <option value="hi">Hindi</option>
-                <option value="fr">French</option>
-                <option value="te">Telugu</option>
-                <option value="ml">Malayalam</option>
-                <option value="kn">Kannada</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="fr">Français</option>
+                <option value="te">తెలుగు (Telugu)</option>
+                <option value="ml">മലയാളം (Malayalam)</option>
+                <option value="kn">ಕನ್ನಡ (Kannada)</option>
             </select>
             <select id="filterModality" class="form-control" onchange="filterData()">
                 <option value="">All Modalities</option>
-                <option value="text">Text</option>
-                <option value="voice">Voice</option>
-                <option value="image">Image</option>
+                <option value="text">💬 Text</option>
+                <option value="voice">🎤 Voice</option>
+                <option value="image">📷 Image</option>
             </select>
             <input type="date" id="filterDate" class="form-control" onchange="filterData()">
             <button class="btn btn-secondary" onclick="exportData()">
@@ -60,18 +60,18 @@
         <div class="tab-header">
             <h3><i class="fas fa-users"></i> Registered Users ({{ users|length }})</h3>
             <div class="pagination">
-                <button class="pagination-btn" onclick="changePage(-1)">← Previous</button>
+                <button class="pagination-btn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i> Previous</button>
                 <span id="pageInfo">Page 1 of 5</span>
-                <button class="pagination-btn" onclick="changePage(1)">Next →</button>
+                <button class="pagination-btn" onclick="changePage(1)">Next <i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
 
         <div class="data-table">
-            <table>
+            <table class="admin-table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Username</th>
+                        <th>User</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Language</th>
@@ -84,30 +84,33 @@
                 <tbody id="usersTableBody">
                     {% for user in users %}
                     <tr>
-                        <td>{{ user.id }}</td>
+                        <td>#{{ user.id }}</td>
                         <td>
                             <div class="user-cell">
-                                <div class="user-avatar-small">
+                                <div class="user-avatar-small" style="background: linear-gradient(135deg, #1F6E8C, #2E8A99);">
                                     {{ user.username[0]|upper }}
                                 </div>
-                                {{ user.username }}
+                                <div>
+                                    <strong>{{ user.username }}</strong>
+                                    <small class="text-muted d-block">{{ user.role|default('user') }}</small>
+                                </div>
                             </div>
                         </td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.phone or '-' }}</td>
                         <td><span class="language-tag">{{ user.language|upper }}</span></td>
-                        <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
-                        <td>{{ user.chat_history|length }}</td>
-                        <td>{{ user.predictions|length }}</td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else '-' }}</td>
+                        <td><span class="badge bg-info">{{ user.chat_history|length }}</span></td>
+                        <td><span class="badge bg-success">{{ user.predictions|length }}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <button class="action-btn view" onclick="viewUserDetails({{ user.id }})">
+                                <button class="action-btn view" onclick="viewUserDetails({{ user.id }})" title="View Details">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="action-btn edit" onclick="editUser({{ user.id }})">
+                                <button class="action-btn edit" onclick="editUser({{ user.id }})" title="Edit User">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn delete" onclick="deleteUser({{ user.id }})">
+                                <button class="action-btn delete" onclick="deleteUser({{ user.id }})" title="Delete User">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -127,10 +130,10 @@
 
         <div class="data-grid">
             {% for prediction in predictions %}
-            <div class="prediction-card">
+            <div class="prediction-card" data-category="{{ prediction.category|default('general') }}">
                 <div class="prediction-header">
                     <div class="user-info">
-                        <div class="user-avatar-small">
+                        <div class="user-avatar-small" style="background: linear-gradient(135deg, #1F6E8C, #2E8A99);">
                             {{ prediction.user.username[0]|upper }}
                         </div>
                         <div>
@@ -148,12 +151,12 @@
 
                 <div class="prediction-content">
                     <div class="symptoms">
-                        <h4>Symptoms:</h4>
+                        <h4><i class="fas fa-stethoscope"></i> Symptoms:</h4>
                         <p>{{ prediction.symptoms[:200] }}{% if prediction.symptoms|length > 200 %}...{% endif %}</p>
                     </div>
 
                     <div class="prediction-result">
-                        <h4>Prediction:</h4>
+                        <h4><i class="fas fa-chart-line"></i> AI Prediction:</h4>
                         <div class="disease-tags">
                             {% if prediction.prediction %}
                                 {% if prediction.prediction is string %}
@@ -173,7 +176,7 @@
                     {% if prediction.confidence %}
                     <div class="confidence-meter">
                         <div class="meter-label">
-                            <span>Confidence:</span>
+                            <span>Confidence Score:</span>
                             <span>{{ (prediction.confidence * 100)|int }}%</span>
                         </div>
                         <div class="meter-bar">
@@ -184,11 +187,11 @@
                 </div>
 
                 <div class="prediction-actions">
-                    <button class="btn btn-sm" onclick="viewPrediction({{ prediction.id }})">
+                    <button class="btn-sm btn-outline-primary" onclick="viewPrediction({{ prediction.id }})">
                         <i class="fas fa-search"></i> View Details
                     </button>
                     {% if prediction.image_path %}
-                    <button class="btn btn-sm" onclick="viewImage('{{ prediction.image_path }}')">
+                    <button class="btn-sm btn-outline-info" onclick="viewImage('{{ prediction.image_path }}')">
                         <i class="fas fa-image"></i> View Image
                     </button>
                     {% endif %}
@@ -209,7 +212,7 @@
             <div class="chat-item">
                 <div class="chat-header">
                     <div class="chat-user">
-                        <div class="user-avatar-small">
+                        <div class="user-avatar-small" style="background: linear-gradient(135deg, #1F6E8C, #2E8A99);">
                             {{ chat.user.username[0]|upper }}
                         </div>
                         <div>
@@ -228,8 +231,8 @@
                 <div class="chat-conversation">
                     <div class="message user-msg">
                         <div class="msg-header">
-                            <i class="fas fa-user"></i>
-                            <strong>User:</strong>
+                            <i class="fas fa-user-circle"></i>
+                            <strong>{{ chat.user.username }}:</strong>
                         </div>
                         <div class="msg-content">
                             {{ chat.message[:150] }}{% if chat.message|length > 150 %}...{% endif %}
@@ -239,7 +242,7 @@
                     <div class="message bot-msg">
                         <div class="msg-header">
                             <i class="fas fa-robot"></i>
-                            <strong>MedicoBot:</strong>
+                            <strong>HealthMate AI:</strong>
                         </div>
                         <div class="msg-content">
                             {{ chat.response[:200] }}{% if chat.response|length > 200 %}...{% endif %}
@@ -248,10 +251,10 @@
                 </div>
 
                 <div class="chat-actions">
-                    <button class="btn btn-sm" onclick="viewFullChat({{ chat.id }})">
-                        <i class="fas fa-expand"></i> View Full
+                    <button class="btn-sm btn-outline-primary" onclick="viewFullChat({{ chat.id }})">
+                        <i class="fas fa-expand-alt"></i> View Full
                     </button>
-                    <button class="btn btn-sm" onclick="deleteChat({{ chat.id }})">
+                    <button class="btn-sm btn-outline-danger" onclick="deleteChat({{ chat.id }})">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
@@ -263,7 +266,7 @@
     <!-- Analytics Tab -->
     <div class="viewer-tab" id="analyticsTab" style="display: none;">
         <div class="tab-header">
-            <h3><i class="fas fa-chart-bar"></i> System Analytics</h3>
+            <h3><i class="fas fa-chart-bar"></i> HealthMate Analytics</h3>
         </div>
 
         <div class="analytics-grid">
@@ -296,22 +299,22 @@
             </div>
 
             <div class="analytics-card wide">
-                <h4><i class="fas fa-calendar-alt"></i> Daily Activity</h4>
+                <h4><i class="fas fa-calendar-alt"></i> Activity Insights</h4>
                 <div class="activity-stats">
                     <div class="stat-row">
-                        <span>Most Active Day:</span>
-                        <strong id="mostActiveDay">Monday</strong>
+                        <span><i class="fas fa-calendar-day"></i> Most Active Day:</span>
+                        <strong id="mostActiveDay">Wednesday</strong>
                     </div>
                     <div class="stat-row">
-                        <span>Peak Hour:</span>
+                        <span><i class="fas fa-clock"></i> Peak Hour:</span>
                         <strong id="peakHour">14:00 - 16:00</strong>
                     </div>
                     <div class="stat-row">
-                        <span>Avg. Session Duration:</span>
+                        <span><i class="fas fa-hourglass-half"></i> Avg. Session Duration:</span>
                         <strong id="avgSession">8.5 minutes</strong>
                     </div>
                     <div class="stat-row">
-                        <span>User Retention:</span>
+                        <span><i class="fas fa-chart-line"></i> User Retention:</span>
                         <strong id="retentionRate">72%</strong>
                     </div>
                 </div>
@@ -321,28 +324,28 @@
                 <h4><i class="fas fa-database"></i> Data Summary</h4>
                 <div class="data-summary">
                     <div class="summary-item">
-                        <i class="fas fa-database"></i>
+                        <i class="fas fa-database" style="color: #1F6E8C;"></i>
                         <div>
                             <h5>Total Data</h5>
                             <p id="totalData">45.2 MB</p>
                         </div>
                     </div>
                     <div class="summary-item">
-                        <i class="fas fa-images"></i>
+                        <i class="fas fa-images" style="color: #27ae60;"></i>
                         <div>
                             <h5>Images Stored</h5>
                             <p id="totalImages">128</p>
                         </div>
                     </div>
                     <div class="summary-item">
-                        <i class="fas fa-file-audio"></i>
+                        <i class="fas fa-file-audio" style="color: #e67e22;"></i>
                         <div>
                             <h5>Voice Recordings</h5>
                             <p id="totalVoice">87</p>
                         </div>
                     </div>
                     <div class="summary-item">
-                        <i class="fas fa-history"></i>
+                        <i class="fas fa-comments" style="color: #3498db;"></i>
                         <div>
                             <h5>Chat Messages</h5>
                             <p id="totalMessages">{{ total_chats }}</p>
@@ -357,7 +360,7 @@
     <div id="detailsModal" class="modal">
         <div class="modal-content wide">
             <div class="modal-header">
-                <h3 id="modalTitle">Details</h3>
+                <h3 id="modalTitle"><i class="fas fa-info-circle"></i> Details</h3>
                 <button class="modal-close" onclick="closeDetailsModal()">&times;</button>
             </div>
             <div class="modal-body" id="modalBody">
@@ -381,23 +384,19 @@
     });
 
     function showTab(tabName) {
-        // Hide all tabs
         document.querySelectorAll('.viewer-tab').forEach(tab => {
             tab.style.display = 'none';
         });
 
-        // Remove active class from all buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
         });
 
-        // Show selected tab
         document.getElementById(tabName + 'Tab').style.display = 'block';
         event.target.classList.add('active');
 
         currentTab = tabName;
 
-        // Update pagination for users tab
         if (tabName === 'users') {
             updatePagination();
         }
@@ -426,9 +425,6 @@
         const totalUsers = {{ users|length }};
         const totalPages = Math.ceil(totalUsers / itemsPerPage);
         document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-
-        // In a real implementation, you would fetch paginated data from the server
-        // For now, we'll just scroll to the table
     }
 
     function scrollToUsersTable() {
@@ -447,8 +443,19 @@
                 const text = row.textContent.toLowerCase();
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
             });
+        } else if (currentTab === 'predictions') {
+            const cards = document.querySelectorAll('.prediction-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        } else if (currentTab === 'chats') {
+            const chats = document.querySelectorAll('.chat-item');
+            chats.forEach(chat => {
+                const text = chat.textContent.toLowerCase();
+                chat.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         }
-        // Add search for other tabs as needed
     }
 
     function filterData() {
@@ -457,8 +464,6 @@
         const modality = document.getElementById('filterModality').value;
         const date = document.getElementById('filterDate').value;
 
-        // In a real implementation, this would make an API call
-        // For now, we'll just show a notification
         showNotification(`Filters applied: ${category || 'All'} | ${language || 'All'} | ${modality || 'All'}`, 'info');
     }
 
@@ -479,10 +484,9 @@
                 exportUrl = '/api/admin/export/all';
         }
 
-        // Trigger download
         const a = document.createElement('a');
         a.href = exportUrl;
-        a.download = `medicobot-${currentTab}-${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `healthmate-${currentTab}-${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
 
         showNotification(`Exporting ${currentTab} data...`, 'success');
@@ -492,45 +496,45 @@
         fetch(`/api/admin/user/${userId}`)
             .then(response => response.json())
             .then(user => {
-                document.getElementById('modalTitle').textContent = `User: ${user.username}`;
+                document.getElementById('modalTitle').innerHTML = `<i class="fas fa-user-circle"></i> User: ${user.username}`;
 
                 let content = `
                     <div class="user-details-modal">
                         <div class="user-header">
-                            <div class="user-avatar-large">
+                            <div class="user-avatar-large" style="background: linear-gradient(135deg, #1F6E8C, #2E8A99);">
                                 ${user.username[0].toUpperCase()}
                             </div>
                             <div class="user-info">
                                 <h4>${user.username}</h4>
-                                <p>${user.email}</p>
-                                <p>Joined: ${new Date(user.created_at).toLocaleDateString()}</p>
+                                <p><i class="fas fa-envelope"></i> ${user.email}</p>
+                                <p><i class="fas fa-calendar"></i> Joined: ${new Date(user.created_at).toLocaleDateString()}</p>
                             </div>
                         </div>
 
                         <div class="user-stats-grid">
                             <div class="stat-box">
-                                <i class="fas fa-comments"></i>
+                                <i class="fas fa-comments" style="color: #1F6E8C;"></i>
                                 <div>
                                     <h5>Chats</h5>
                                     <p>${user.chat_history ? user.chat_history.length : 0}</p>
                                 </div>
                             </div>
                             <div class="stat-box">
-                                <i class="fas fa-stethoscope"></i>
+                                <i class="fas fa-stethoscope" style="color: #27ae60;"></i>
                                 <div>
                                     <h5>Predictions</h5>
                                     <p>${user.predictions ? user.predictions.length : 0}</p>
                                 </div>
                             </div>
                             <div class="stat-box">
-                                <i class="fas fa-language"></i>
+                                <i class="fas fa-language" style="color: #e67e22;"></i>
                                 <div>
                                     <h5>Language</h5>
                                     <p>${user.language.toUpperCase()}</p>
                                 </div>
                             </div>
                             <div class="stat-box">
-                                <i class="fas fa-phone"></i>
+                                <i class="fas fa-phone" style="color: #3498db;"></i>
                                 <div>
                                     <h5>Phone</h5>
                                     <p>${user.phone || 'Not provided'}</p>
@@ -539,11 +543,11 @@
                         </div>
 
                         <div class="user-activity">
-                            <h5>Recent Activity</h5>
+                            <h5><i class="fas fa-history"></i> Recent Activity</h5>
                             ${user.chat_history && user.chat_history.length > 0 ?
                                 user.chat_history.slice(0, 5).map(chat => `
                                     <div class="activity-item">
-                                        <i class="fas fa-comment-dots"></i>
+                                        <i class="fas fa-comment-dots" style="color: #1F6E8C;"></i>
                                         <div>
                                             <p>${chat.message.substring(0, 80)}${chat.message.length > 80 ? '...' : ''}</p>
                                             <small>${new Date(chat.timestamp).toLocaleString()}</small>
@@ -570,7 +574,7 @@
     }
 
     function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this user? All their data will be permanently deleted.')) {
+        if (confirm('⚠️ Are you sure you want to delete this user? All their data will be permanently deleted.')) {
             fetch(`/api/admin/user/${userId}`, { method: 'DELETE' })
                 .then(response => {
                     if (response.ok) {
@@ -588,7 +592,6 @@
     }
 
     function viewPrediction(predictionId) {
-        // Similar to viewUserDetails, but for predictions
         showNotification('View prediction details feature coming soon!', 'info');
     }
 
@@ -596,14 +599,14 @@
         const modalBody = document.getElementById('modalBody');
         modalBody.innerHTML = `
             <div class="image-viewer">
-                <img src="/static/uploads/${imagePath}" alt="Medical Image" style="max-width: 100%; border-radius: 10px;">
+                <img src="/static/uploads/${imagePath}" alt="Medical Image" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
                 <div class="image-info">
-                    <p><strong>File:</strong> ${imagePath}</p>
-                    <p><strong>Uploaded:</strong> ${new Date().toLocaleDateString()}</p>
+                    <p><i class="fas fa-file-image"></i> <strong>File:</strong> ${imagePath}</p>
+                    <p><i class="fas fa-calendar"></i> <strong>Uploaded:</strong> ${new Date().toLocaleDateString()}</p>
                 </div>
             </div>
         `;
-        document.getElementById('modalTitle').textContent = 'Medical Image';
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-image"></i> Medical Image';
         document.getElementById('detailsModal').style.display = 'flex';
     }
 
@@ -611,19 +614,19 @@
         fetch(`/api/admin/chat/${chatId}`)
             .then(response => response.json())
             .then(chat => {
-                document.getElementById('modalTitle').textContent = `Chat with ${chat.user.username}`;
+                document.getElementById('modalTitle').innerHTML = `<i class="fas fa-comments"></i> Chat with ${chat.user.username}`;
 
                 let content = `
                     <div class="full-chat">
                         <div class="chat-meta-info">
-                            <p><strong>Time:</strong> ${new Date(chat.timestamp).toLocaleString()}</p>
-                            <p><strong>Language:</strong> ${chat.language.toUpperCase()}</p>
-                            <p><strong>Modality:</strong> ${chat.modality}</p>
+                            <p><i class="fas fa-clock"></i> <strong>Time:</strong> ${new Date(chat.timestamp).toLocaleString()}</p>
+                            <p><i class="fas fa-language"></i> <strong>Language:</strong> ${chat.language.toUpperCase()}</p>
+                            <p><i class="fas fa-microphone"></i> <strong>Modality:</strong> ${chat.modality}</p>
                         </div>
 
                         <div class="chat-messages-full">
                             <div class="message-full user">
-                                <div class="msg-avatar">
+                                <div class="msg-avatar" style="background: linear-gradient(135deg, #1F6E8C, #2E8A99);">
                                     <i class="fas fa-user"></i>
                                 </div>
                                 <div class="msg-content-full">
@@ -638,12 +641,12 @@
                             </div>
 
                             <div class="message-full bot">
-                                <div class="msg-avatar">
+                                <div class="msg-avatar" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
                                     <i class="fas fa-robot"></i>
                                 </div>
                                 <div class="msg-content-full">
                                     <div class="msg-header-full">
-                                        <strong>MedicoBot</strong>
+                                        <strong>HealthMate AI</strong>
                                         <small>${new Date(chat.timestamp).toLocaleTimeString()}</small>
                                     </div>
                                     <div class="msg-text">
@@ -683,7 +686,6 @@
     }
 
     function initializeCharts() {
-        // Usage Chart
         const usageCtx = document.getElementById('usageChart').getContext('2d');
         usageChart = new Chart(usageCtx, {
             type: 'line',
@@ -692,29 +694,28 @@
                 datasets: [{
                     label: 'Active Users',
                     data: [120, 190, 300, 500, 700, 900],
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    fill: true
+                    borderColor: '#1F6E8C',
+                    backgroundColor: 'rgba(31, 110, 140, 0.1)',
+                    fill: true,
+                    tension: 0.4
                 }, {
                     label: 'Consultations',
                     data: [450, 600, 800, 1200, 1500, 2000],
-                    borderColor: '#43e97b',
-                    backgroundColor: 'rgba(67, 233, 123, 0.1)',
-                    fill: true
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    fill: true,
+                    tension: 0.4
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'top',
-                    }
+                    legend: { position: 'top' }
                 }
             }
         });
 
-        // Language Chart
         const languageCtx = document.getElementById('languageChart').getContext('2d');
         languageChart = new Chart(languageCtx, {
             type: 'doughnut',
@@ -722,24 +723,18 @@
                 labels: ['English', 'Tamil', 'Hindi', 'French', 'Telugu', 'Malayalam', 'Kannada'],
                 datasets: [{
                     data: [45, 20, 15, 5, 7, 5, 3],
-                    backgroundColor: [
-                        '#667eea', '#43e97b', '#ff4d4d', '#ffd24d',
-                        '#4d79ff', '#ff944d', '#764ba2'
-                    ]
+                    backgroundColor: ['#1F6E8C', '#2E8A99', '#27ae60', '#e67e22', '#3498db', '#9b59b6', '#f39c12']
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
 
-        // Disease Chart
         const diseaseCtx = document.getElementById('diseaseChart').getContext('2d');
         diseaseChart = new Chart(diseaseCtx, {
             type: 'bar',
@@ -748,24 +743,19 @@
                 datasets: [{
                     label: 'Cases',
                     data: [320, 280, 190, 150, 220, 180],
-                    backgroundColor: [
-                        '#667eea', '#43e97b', '#ff4d4d',
-                        '#ffd24d', '#4d79ff', '#ff944d'
-                    ]
+                    backgroundColor: '#1F6E8C',
+                    borderRadius: 8
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 }
             }
         });
 
-        // Modality Chart
         const modalityCtx = document.getElementById('modalityChart').getContext('2d');
         modalityChart = new Chart(modalityCtx, {
             type: 'pie',
@@ -773,23 +763,20 @@
                 labels: ['Text', 'Voice', 'Image'],
                 datasets: [{
                     data: [65, 25, 10],
-                    backgroundColor: ['#667eea', '#43e97b', '#ff4d4d']
+                    backgroundColor: ['#1F6E8C', '#27ae60', '#e67e22']
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
     }
 
     function loadAnalytics() {
-        // Simulate loading analytics data
         setTimeout(() => {
             document.getElementById('mostActiveDay').textContent = 'Wednesday';
             document.getElementById('peakHour').textContent = '14:00 - 16:00';
@@ -807,14 +794,24 @@
     }
 
     function showNotification(message, type) {
-        if (window.MedicoBot && window.MedicoBot.showNotification) {
-            window.MedicoBot.showNotification(message, type);
-        } else {
-            alert(message);
-        }
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+        notification.style.zIndex = '9999';
+        notification.style.maxWidth = '350px';
+        notification.style.borderRadius = '1rem';
+        notification.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
     }
 
-    // Close modal when clicking outside
     window.onclick = function(event) {
         const modal = document.getElementById('detailsModal');
         if (event.target == modal) {
@@ -824,6 +821,17 @@
 </script>
 
 <style>
+    /* HealthMate AI Theme Colors */
+    :root {
+        --primary: #1F6E8C;
+        --primary-dark: #0e5a76;
+        --secondary: #2E8A99;
+        --success: #27ae60;
+        --warning: #e67e22;
+        --danger: #e74c3c;
+        --info: #3498db;
+    }
+
     .viewer-container {
         max-width: 1600px;
         margin: 0 auto;
@@ -837,17 +845,15 @@
 
     .viewer-header h1 {
         font-size: 2.5rem;
-        color: #2c3e50;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 15px;
-    }
-
-    .viewer-header p {
-        color: #666;
-        font-size: 1.1rem;
     }
 
     .viewer-tabs {
@@ -856,6 +862,7 @@
         margin-bottom: 30px;
         border-bottom: 2px solid #e0e0e0;
         padding-bottom: 15px;
+        flex-wrap: wrap;
     }
 
     .tab-btn {
@@ -868,22 +875,24 @@
         color: #666;
         font-size: 1rem;
         transition: all 0.3s;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .tab-btn i {
+        margin-right: 8px;
     }
 
     .tab-btn.active {
-        color: #667eea;
-        border-bottom-color: #667eea;
-    }
-
-    .tab-btn:hover:not(.active) {
-        color: #333;
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+        background: rgba(31, 110, 140, 0.05);
     }
 
     .viewer-controls {
         background: white;
         padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.05);
         margin-bottom: 30px;
         display: flex;
         flex-wrap: wrap;
@@ -909,13 +918,15 @@
         width: 100%;
         padding: 12px 15px 12px 45px;
         border: 2px solid #e0e0e0;
-        border-radius: 8px;
+        border-radius: 12px;
         font-size: 1rem;
+        transition: all 0.3s;
     }
 
     .search-box input:focus {
-        border-color: #667eea;
+        border-color: var(--primary);
         outline: none;
+        box-shadow: 0 0 0 3px rgba(31, 110, 140, 0.1);
     }
 
     .filter-controls {
@@ -928,12 +939,31 @@
     .filter-controls select,
     .filter-controls input {
         min-width: 150px;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+        padding: 10px 12px;
+    }
+
+    .btn-secondary {
+        background: white;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
     }
 
     .viewer-tab {
         background: white;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.05);
         padding: 25px;
         margin-bottom: 30px;
     }
@@ -943,6 +973,8 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     .tab-header h3 {
@@ -953,17 +985,48 @@
         gap: 10px;
     }
 
-    .pagination {
-        display: flex;
-        align-items: center;
-        gap: 20px;
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .admin-table th {
+        background: #f8fbfe;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary);
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .admin-table td {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #555;
+    }
+
+    .badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .badge.bg-info {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .badge.bg-success {
+        background: #e8f5e9;
+        color: #388e3c;
     }
 
     .pagination-btn {
         padding: 8px 20px;
         background: #f8f9fa;
         border: 2px solid #e0e0e0;
-        border-radius: 8px;
+        border-radius: 10px;
         color: #555;
         cursor: pointer;
         font-weight: 500;
@@ -971,108 +1034,14 @@
     }
 
     .pagination-btn:hover {
-        background: #e9ecef;
-        border-color: #667eea;
-        color: #667eea;
-    }
-
-    #pageInfo {
-        color: #666;
-        font-size: 0.95rem;
-    }
-
-    .data-table {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th {
-        background: #f8f9fa;
-        padding: 15px;
-        text-align: left;
-        font-weight: 600;
-        color: #555;
-        font-size: 0.9rem;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    td {
-        padding: 15px;
-        border-bottom: 1px solid #f0f0f0;
-        color: #555;
-    }
-
-    .user-cell {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .user-avatar-small {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--primary);
+        border-color: var(--primary);
         color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        flex-shrink: 0;
-    }
-
-    .language-tag {
-        padding: 4px 12px;
-        background: #e3f2fd;
-        color: #1976d2;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 5px;
-    }
-
-    .action-btn {
-        width: 32px;
-        height: 32px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-    }
-
-    .action-btn.view {
-        background: #e3f2fd;
-        color: #1976d2;
-    }
-
-    .action-btn.edit {
-        background: #e8f5e9;
-        color: #388e3c;
-    }
-
-    .action-btn.delete {
-        background: #ffebee;
-        color: #d32f2f;
-    }
-
-    .action-btn:hover {
-        transform: scale(1.1);
     }
 
     .data-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
         gap: 25px;
     }
 
@@ -1080,534 +1049,136 @@
         .data-grid {
             grid-template-columns: 1fr;
         }
+        .filter-controls {
+            width: 100%;
+        }
     }
 
     .prediction-card {
-        background: #f8f9fa;
-        border-radius: 15px;
+        background: #f8fbfe;
+        border-radius: 20px;
         padding: 20px;
-        border-left: 5px solid #667eea;
+        border-left: 4px solid var(--primary);
+        transition: all 0.3s;
     }
 
-    .prediction-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
+    .prediction-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.1);
     }
 
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .user-info strong {
-        display: block;
-        font-size: 0.95rem;
-    }
-
-    .user-info small {
-        color: #888;
-        font-size: 0.85rem;
-    }
-
-    .modality-badge {
-        padding: 4px 12px;
+    .btn-sm {
+        padding: 6px 16px;
         border-radius: 20px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 5px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
     }
 
-    .modality-badge.text {
-        background: #e3f2fd;
-        color: #1976d2;
+    .btn-outline-primary {
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
     }
 
-    .modality-badge.voice {
-        background: #fff3e0;
-        color: #f57c00;
+    .btn-outline-primary:hover {
+        background: var(--primary);
+        color: white;
     }
 
-    .modality-badge.image {
-        background: #f3e5f5;
-        color: #7b1fa2;
+    .btn-outline-info {
+        background: transparent;
+        border: 1px solid var(--info);
+        color: var(--info);
     }
 
-    .prediction-content {
-        margin-bottom: 15px;
+    .btn-outline-info:hover {
+        background: var(--info);
+        color: white;
     }
 
-    .prediction-content h4 {
-        margin: 0 0 8px;
-        font-size: 0.9rem;
-        color: #555;
+    .btn-outline-danger {
+        background: transparent;
+        border: 1px solid var(--danger);
+        color: var(--danger);
     }
 
-    .prediction-content p {
-        margin: 0 0 15px;
-        color: #666;
-        font-size: 0.95rem;
-        line-height: 1.5;
+    .btn-outline-danger:hover {
+        background: var(--danger);
+        color: white;
     }
 
-    .disease-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-
-    .disease-tag {
-        padding: 6px 12px;
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        color: #555;
-    }
-
-    .no-prediction {
-        color: #888;
-        font-style: italic;
-        font-size: 0.9rem;
-    }
-
-    .confidence-meter {
-        margin-top: 15px;
-    }
-
-    .meter-label {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
-        font-size: 0.9rem;
-        color: #555;
-    }
-
-    .meter-bar {
-        height: 8px;
-        background: #e0e0e0;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    .meter-fill {
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        border-radius: 4px;
-    }
-
-    .prediction-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .chat-viewer {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .chat-item {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-        border-left: 5px solid #43e97b;
-    }
-
-    .chat-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .chat-user {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .chat-meta {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .language-badge {
-        padding: 4px 12px;
-        background: #e3f2fd;
-        color: #1976d2;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .chat-conversation {
-        margin-bottom: 15px;
-    }
-
-    .message {
-        margin-bottom: 15px;
-    }
-
-    .message:last-child {
-        margin-bottom: 0;
-    }
-
-    .msg-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 5px;
-    }
-
-    .msg-header i {
-        color: #667eea;
-    }
-
-    .bot-msg .msg-header i {
-        color: #43e97b;
-    }
-
-    .msg-content {
-        padding: 10px 15px;
-        background: white;
-        border-radius: 10px;
-        color: #555;
-        font-size: 0.95rem;
-        line-height: 1.5;
-    }
-
-    .chat-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .analytics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
-    }
-
-    .analytics-card {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-    }
-
-    .analytics-card.wide {
-        grid-column: span 2;
-    }
-
-    @media (max-width: 768px) {
-        .analytics-card.wide {
-            grid-column: span 1;
-        }
-    }
-
-    .analytics-card h4 {
-        margin: 0 0 15px;
-        color: #2c3e50;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .chart-container {
-        height: 200px;
-        position: relative;
-    }
-
-    .activity-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
-    @media (max-width: 768px) {
-        .activity-stats {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .stat-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .stat-row:last-child {
-        border-bottom: none;
-    }
-
-    .stat-row span {
-        color: #666;
-        font-size: 0.95rem;
-    }
-
-    .stat-row strong {
-        color: #2c3e50;
-        font-size: 1.1rem;
-    }
-
-    .data-summary {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .summary-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-    }
-
-    .summary-item i {
-        font-size: 1.5rem;
-        color: #667eea;
-    }
-
-    .summary-item h5 {
-        margin: 0 0 5px;
-        color: #555;
-        font-size: 0.9rem;
-    }
-
-    .summary-item p {
-        margin: 0;
-        color: #2c3e50;
-        font-size: 1.2rem;
-        font-weight: 600;
-    }
-
-    .user-details-modal .user-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
-
-    .user-avatar-large {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 50%;
-        display: flex;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
-        font-weight: 600;
     }
 
-    .user-info h4 {
-        margin: 0 0 5px;
-        color: #2c3e50;
+    .modal-content {
+        background: white;
+        border-radius: 24px;
+        max-width: 800px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease;
     }
 
-    .user-info p {
-        margin: 0 0 5px;
-        color: #666;
+    .modal-content.wide {
+        max-width: 900px;
     }
 
-    .user-stats-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        margin-bottom: 25px;
-    }
-
-    @media (max-width: 768px) {
-        .user-stats-grid {
-            grid-template-columns: repeat(2, 1fr);
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 
-    .stat-box {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .stat-box i {
-        font-size: 1.5rem;
-        color: #667eea;
-    }
-
-    .stat-box h5 {
-        margin: 0 0 3px;
-        color: #666;
-        font-size: 0.85rem;
-    }
-
-    .stat-box p {
-        margin: 0;
-        color: #2c3e50;
-        font-size: 1.1rem;
-        font-weight: 600;
-    }
-
-    .user-activity h5 {
-        margin: 0 0 15px;
-        color: #2c3e50;
-    }
-
-    .activity-item {
-        display: flex;
-        gap: 10px;
-        padding: 10px;
-        background: white;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }
-
-    .activity-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .activity-item i {
-        color: #667eea;
-        margin-top: 3px;
-    }
-
-    .activity-item p {
-        margin: 0 0 3px;
-        color: #555;
-        font-size: 0.95rem;
-    }
-
-    .activity-item small {
-        color: #888;
-        font-size: 0.85rem;
-    }
-
-    .no-activity {
-        text-align: center;
-        padding: 20px;
-        color: #888;
-        font-style: italic;
-    }
-
-    .full-chat .chat-meta-info {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
+    .modal-header {
+        padding: 20px 25px;
         border-bottom: 1px solid #e0e0e0;
-    }
-
-    @media (max-width: 768px) {
-        .full-chat .chat-meta-info {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .full-chat .chat-meta-info p {
-        margin: 0;
-        color: #666;
-    }
-
-    .chat-messages-full {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .message-full {
-        display: flex;
-        gap: 15px;
-    }
-
-    .message-full.user {
-        align-self: flex-end;
-        flex-direction: row-reverse;
-    }
-
-    .message-full.bot {
-        align-self: flex-start;
-    }
-
-    .msg-avatar {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .message-full.bot .msg-avatar {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-
-    .msg-content-full {
-        background: white;
-        padding: 15px;
-        border-radius: 15px;
-        max-width: 80%;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .message-full.user .msg-content-full {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-
-    .msg-header-full {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, #eef5ff, #e0eefc);
+        border-radius: 24px 24px 0 0;
     }
 
-    .msg-header-full strong {
-        font-weight: 600;
+    .modal-header h3 {
+        margin: 0;
+        color: var(--primary);
     }
 
-    .msg-header-full small {
-        opacity: 0.8;
-    }
-
-    .message-full.user .msg-header-full small {
-        color: rgba(255,255,255,0.8);
-    }
-
-    .msg-text {
-        line-height: 1.6;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-    .image-viewer {
-        text-align: center;
-    }
-
-    .image-info {
-        margin-top: 20px;
-        text-align: left;
-    }
-
-    .image-info p {
-        margin: 5px 0;
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
         color: #666;
+        transition: all 0.3s;
+    }
+
+    .modal-close:hover {
+        color: var(--danger);
+        transform: scale(1.1);
+    }
+
+    .modal-body {
+        padding: 25px;
     }
 </style>
 {% endblock %}

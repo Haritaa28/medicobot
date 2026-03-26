@@ -2,11 +2,449 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MedicoBot - AI Health Assistant{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>{% block title %}HealthMate AI - Your Intelligent Health Assistant{% endblock %}</title>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons (optional) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary: #1F6E8C;
+            --primary-dark: #0e5a76;
+            --primary-light: #2E8A99;
+            --secondary: #2c3e50;
+            --success: #27ae60;
+            --warning: #e67e22;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --light: #f8f9fa;
+            --dark: #1a2c3e;
+            --gray: #6c757d;
+            --gray-light: #e2edf3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(145deg, #eef5ff 0%, #e0eefc 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-brand a i {
+            background: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .nav-brand a:hover {
+            transform: scale(1.02);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .nav-link i {
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(31, 110, 140, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.logout:hover {
+            color: var(--danger);
+            background: rgba(231, 76, 60, 0.08);
+        }
+
+        .nav-link.register {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .nav-link.register:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            margin-left: 0.5rem;
+        }
+
+        .language-selector select {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 50px;
+            background: white;
+            color: var(--dark);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-selector select:hover {
+            border-color: var(--primary);
+        }
+
+        .language-selector select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(31, 110, 140, 0.1);
+        }
+
+        /* Mobile Toggle */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            max-width: 400px;
+        }
+
+        .flash-message {
+            background: white;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .flash-success {
+            border-left-color: var(--success);
+            background: linear-gradient(135deg, #f0fdf4, #e8f5e9);
+        }
+
+        .flash-danger, .flash-error {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, #fef2f2, #ffebee);
+        }
+
+        .flash-warning {
+            border-left-color: var(--warning);
+            background: linear-gradient(135deg, #fffbeb, #fff3e0);
+        }
+
+        .flash-info {
+            border-left-color: var(--info);
+            background: linear-gradient(135deg, #eff6ff, #e3f2fd);
+        }
+
+        .flash-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--gray);
+            padding: 0 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .flash-close:hover {
+            color: var(--danger);
+            transform: scale(1.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-top: 1px solid var(--gray-light);
+            margin-top: auto;
+            padding: 2rem 0 1rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3, .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-section h3 i, .footer-section h4 i {
+            margin-right: 8px;
+        }
+
+        .footer-section p {
+            color: var(--gray);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--gray);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 1.5rem auto 0;
+            padding: 1rem 2rem 0;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mode-toggle span {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .mode-btn {
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(31, 110, 140, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                border-top: 1px solid var(--gray-light);
+            }
+
+            .nav-menu.show {
+                display: flex;
+            }
+
+            .nav-link {
+                justify-content: center;
+            }
+
+            .language-selector {
+                margin: 0.5rem 0;
+                text-align: center;
+            }
+
+            .language-selector select {
+                width: 100%;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-section a:hover {
+                transform: translateX(0);
+            }
+
+            .flash-messages {
+                top: 70px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Selection Styling */
+        ::selection {
+            background: rgba(31, 110, 140, 0.2);
+            color: var(--primary);
+        }
+
+        /* Animation for flash messages */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+    </style>
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -15,23 +453,37 @@
         <div class="nav-container">
             <div class="nav-brand">
                 <a href="{{ url_for('index') }}">
-                    <i class="fas fa-robot"></i>
-                    <span>MedicoBot</span>
+                    <i class="fas fa-heartbeat"></i>
+                    <span>HealthMate AI</span>
                 </a>
             </div>
 
             <div class="nav-menu" id="navMenu">
-                <a href="{{ url_for('index') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('index') }}" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-comment-medical"></i> Chat</a>
-                    <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                    <a href="{{ url_for('home') }}" class="nav-link">
+                        <i class="fas fa-comment-medical"></i> Chat
+                    </a>
+                    <a href="{{ url_for('profile') }}" class="nav-link">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
                     {% if current_user.username == 'admin' %}
-                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link"><i class="fas fa-cog"></i> Admin</a>
+                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                            <i class="fas fa-chart-line"></i> Admin
+                        </a>
                     {% endif %}
-                    <a href="{{ url_for('logout') }}" class="nav-link logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="{{ url_for('logout') }}" class="nav-link logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 {% else %}
-                    <a href="{{ url_for('login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <a href="{{ url_for('register') }}" class="nav-link register"><i class="fas fa-user-plus"></i> Register</a>
+                    <a href="{{ url_for('login') }}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="{{ url_for('register') }}" class="nav-link register">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
                 {% endif %}
 
                 <!-- Language Selector -->
@@ -60,6 +512,7 @@
             <div class="flash-messages">
                 {% for category, message in messages %}
                     <div class="flash-message flash-{{ category }}">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' or category == 'error' %}exclamation-triangle{% elif category == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
                         {{ message }}
                         <button class="flash-close" onclick="this.parentElement.remove()">×</button>
                     </div>
@@ -77,30 +530,49 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3><i class="fas fa-robot"></i> MedicoBot</h3>
-                <p>AI-powered multilingual health assistant for disease prediction and medical guidance.</p>
+                <h3><i class="fas fa-heartbeat"></i> HealthMate AI</h3>
+                <p>Your intelligent health companion — instant symptom insights, voice & image support, always by your side.</p>
+                <div class="mt-2">
+                    <span class="badge" style="background: #e8f5e9; color: #27ae60; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem;">
+                        <i class="fas fa-check-circle"></i> 24/7 Available
+                    </span>
+                    <span class="badge" style="background: #e3f2fd; color: #1F6E8C; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem;">
+                        <i class="fas fa-shield-alt"></i> HIPAA Compliant
+                    </span>
+                </div>
             </div>
             <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="{{ url_for('index') }}">Home</a>
-                <a href="{{ url_for('chat') if current_user.is_authenticated else url_for('login') }}">Chat Assistant</a>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
+                <h4><i class="fas fa-link"></i> Quick Links</h4>
+                <a href="{{ url_for('index') }}"><i class="fas fa-chevron-right"></i> Home</a>
+                <a href="{{ url_for('home') if current_user.is_authenticated else url_for('login') }}">
+                    <i class="fas fa-chevron-right"></i> AI Health Assistant
+                </a>
+                <a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a>
+                <a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a>
             </div>
             <div class="footer-section">
-                <h4>Contact</h4>
-                <p><i class="fas fa-envelope"></i> support@medicobot.com</p>
+                <h4><i class="fas fa-phone-alt"></i> Contact & Support</h4>
+                <p><i class="fas fa-envelope"></i> support@healthmate.ai</p>
                 <p><i class="fas fa-phone"></i> +91 9876543210</p>
+                <p><i class="fas fa-clock"></i> 24/7 Available</p>
             </div>
             <div class="footer-section">
-                <h4>Disclaimer</h4>
-                <p class="disclaimer">This is an AI assistant for informational purposes only. Always consult a qualified healthcare professional for medical advice.</p>
+                <h4><i class="fas fa-exclamation-triangle"></i> Disclaimer</h4>
+                <p class="disclaimer">HealthMate AI provides preliminary health information for guidance only. This is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional for medical concerns.</p>
+                <div class="mt-2">
+                    <span class="badge" style="background: #fff3e0; color: #e67e22; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem;">
+                        <i class="fas fa-microphone"></i> Voice Support
+                    </span>
+                    <span class="badge" style="background: #f3e5f5; color: #9b59b6; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem;">
+                        <i class="fas fa-camera"></i> Image Analysis
+                    </span>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 MedicoBot. All rights reserved.</p>
+            <p>&copy; HealthMate AI. All rights reserved. Your trusted AI health companion.</p>
             <div class="mode-toggle">
-                <span>Mode:</span>
+                <span><i class="fas fa-adjust"></i> Mode:</span>
                 <button id="modeToggle" class="mode-btn">Online</button>
             </div>
         </div>
@@ -112,6 +584,7 @@
     {% block extra_js %}{% endblock %}
 
     <script>
+        // Change language function
         function changeLanguage(lang) {
             fetch('/api/translate', {
                 method: 'POST',
@@ -122,9 +595,13 @@
                 })
             }).then(() => {
                 window.location.href = '?lang=' + lang;
+            }).catch(error => {
+                console.error('Language change error:', error);
+                window.location.href = '?lang=' + lang;
             });
         }
 
+        // Mode toggle
         document.getElementById('modeToggle').addEventListener('click', function() {
             const currentMode = this.textContent;
             const newMode = currentMode === 'Online' ? 'Offline' : 'Online';
@@ -136,13 +613,70 @@
             }).then(response => response.json())
               .then(data => {
                   this.textContent = newMode;
-                  alert('Switched to ' + newMode + ' mode');
+                  showNotification('Switched to ' + newMode + ' mode', 'info');
+              }).catch(error => {
+                  console.error('Mode toggle error:', error);
+                  this.textContent = newMode;
               });
         });
 
         // Mobile menu toggle
         document.getElementById('navToggle').addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // Auto-dismiss flash messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const flashMessages = document.querySelectorAll('.flash-message');
+                flashMessages.forEach(function(msg) {
+                    msg.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => msg.remove(), 500);
+                });
+            }, 5000);
+        });
+
+        // Global notification function
+        function showNotification(message, type = 'info') {
+            const flashContainer = document.querySelector('.flash-messages') || document.body;
+            const notification = document.createElement('div');
+            notification.className = `flash-message flash-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                ${message}
+                <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+            `;
+
+            if (flashContainer.classList && flashContainer.classList.contains('flash-messages')) {
+                flashContainer.appendChild(notification);
+            } else {
+                let container = document.querySelector('.flash-messages');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.className = 'flash-messages';
+                    document.body.insertBefore(container, document.querySelector('main'));
+                }
+                container.appendChild(notification);
+            }
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.5s ease forwards';
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+        }
+
+        // Make showNotification globally available
+        window.showNotification = showNotification;
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navMenu = document.getElementById('navMenu');
+            const navToggle = document.getElementById('navToggle');
+            if (navMenu.classList.contains('show') &&
+                !navMenu.contains(event.target) &&
+                !navToggle.contains(event.target)) {
+                navMenu.classList.remove('show');
+            }
         });
     </script>
 </body>

@@ -2,211 +2,410 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCoBot - Your AI Medical Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>HealthMate AI | Smart Medical Assistant</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(145deg, #eef5ff 0%, #e0eefc 100%);
+            color: #1a2c3e;
             min-height: 100vh;
         }
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
         }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1F6E8C, #2E8A99);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .navbar-brand i { background: none; color: #1F6E8C; }
+        .nav-link {
+            font-weight: 500;
+            color: #4a6272 !important;
+            transition: all 0.3s;
+            margin: 0 0.5rem;
+        }
+        .nav-link:hover { color: #1F6E8C !important; transform: translateY(-2px); }
         .hero-section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 50px;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .feature-card {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 15px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-            height: 100%;
+            border-radius: 2rem;
+            padding: 3rem;
+            margin-top: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 32, 64, 0.12);
+            animation: fadeInUp 0.6s ease-out;
         }
-        .feature-card:hover {
-            transform: translateY(-5px);
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
-        .feature-icon {
-            font-size: 3rem;
-            color: #667eea;
-            margin-bottom: 20px;
+        .hero-text { flex: 1; }
+        .hero-text h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1F6E8C, #2E8A99);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .hero-text .lead { font-size: 1.1rem; color: #3a5a6e; margin-bottom: 1.5rem; }
+        .hero-image { flex: 0.8; text-align: center; }
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1F6E8C 0%, #2E8A99 100%);
             border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
+            padding: 12px 32px;
+            border-radius: 60px;
             font-weight: 600;
+            transition: all 0.3s;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(31, 110, 140, 0.4); }
+        .btn-outline-primary {
+            border: 2px solid #1F6E8C;
+            color: #1F6E8C;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 600;
+            background: transparent;
         }
+        .btn-outline-primary:hover { background: #1F6E8C; color: white; }
+        .feature-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(31, 110, 140, 0.1);
+            height: 100%;
+            cursor: pointer;
+            text-align: center;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -12px rgba(31, 110, 140, 0.2);
+        }
+        .feature-icon {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #e7f1f6 0%, #d4e6ef 100%);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1.5rem;
+            margin: 0 auto 1.5rem;
+            color: #1F6E8C;
+        }
+        .doctor-advice-banner {
+            background: linear-gradient(135deg, #1F6E8C 0%, #2E8A99 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: white;
+            text-align: center;
+        }
+        .tips-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.05);
+        }
+        .tips-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .tips-text { flex: 1.2; }
+        .tips-text h3 { font-size: 1.8rem; font-weight: 700; color: #1F6E8C; }
+        .tips-text ul li { margin-bottom: 0.8rem; }
+        .tips-text ul li i { color: #1F6E8C; margin-right: 0.8rem; }
+        .tips-image { flex: 0.8; text-align: center; }
+        .tips-image img { max-width: 100%; border-radius: 1.5rem; }
         .stat-card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.05);
+            height: 100%;
         }
+        .stat-card:hover { transform: translateY(-5px); }
         .stat-number {
             font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1F6E8C, #2E8A99);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .how-it-works-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+        .step-number-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1F6E8C, #2E8A99);
+            color: white;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            flex-shrink: 0;
         }
         footer {
-            background: rgba(255, 255, 255, 0.9);
-            border-top: 1px solid #eee;
+            background: white;
+            border-top: 1px solid #e2edf3;
+            margin-top: 4rem;
+            padding: 2rem 0;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a { color: #1F6E8C; text-decoration: none; font-weight: 500; }
+        .disclaimer { font-size: 0.75rem; color: #6c8ea0; max-width: 700px; margin: 0.5rem auto 0; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .hero-section { padding: 2rem; }
+            .hero-text h1 { font-size: 2rem; }
+            .step-item { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">
-                <i class="fas fa-heartbeat text-danger"></i> MediCoBot
+                <i class="fas fa-heartbeat me-2"></i> HealthMate AI
             </a>
-            <div class="navbar-nav">
-                {% if current_user.is_authenticated %}
-                    <a class="nav-link" href="/chat"><i class="fas fa-comment-medical"></i> Chat</a>
-                    <a class="nav-link" href="/profile"><i class="fas fa-user"></i> Profile</a>
-                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                {% else %}
-                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Register</a>
-                {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        <a class="nav-link" href="/chat"><i class="fas fa-comment-medical me-1"></i> Chat</a>
+                        <a class="nav-link" href="/profile"><i class="fas fa-user me-1"></i> Profile</a>
+                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    {% else %}
+                        <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                        <a class="nav-link" href="/register"><i class="fas fa-user-plus me-1"></i> Register</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="container">
-        <div class="hero-section text-center">
-            <h1 class="display-4 fw-bold mb-4">Welcome to <span class="text-primary">MediCoBot</span></h1>
-            <p class="lead mb-4">Your AI-powered medical assistant providing instant health advice and symptom analysis.</p>
-
-            {% if not current_user.is_authenticated %}
-                <div class="mt-4">
-                    <a href="/register" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-user-plus"></i> Create Free Account
-                    </a>
-                    <a href="/chat" class="btn btn-outline-primary btn-lg">
-                        <i class="fas fa-comment-medical"></i> Try Demo Chat
-                    </a>
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Welcome to <span>HealthMate AI</span></h1>
+                    <p class="lead">Your intelligent health companion — instant symptom insights, voice & image support, always by your side.</p>
+                    {% if not current_user.is_authenticated %}
+                        <div class="mt-4">
+                            <a href="/register" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-user-plus me-2"></i> Create Free Account
+                            </a>
+                            <a href="/login" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="mt-4">
+                            <a href="/chat" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-comment-medical me-2"></i> Start Chatting
+                            </a>
+                            <a href="/profile" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-user me-2"></i> View Profile
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
-            {% else %}
-                <div class="mt-4">
-                    <a href="/chat" class="btn btn-primary btn-lg">
-                        <i class="fas fa-comment-medical"></i> Start Chatting Now
-                    </a>
+                <div class="hero-image">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Doctor Consultation">
                 </div>
-            {% endif %}
+            </div>
         </div>
 
-        <!-- Features -->
         <div class="row mt-5">
             <div class="col-md-6 col-lg-3">
-                <div class="feature-card text-center">
-                    <div class="feature-icon">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
+                <div class="feature-card text-center" onclick="redirectToAction()">
+                    <div class="feature-icon"><i class="fas fa-stethoscope"></i></div>
                     <h4>Symptom Analysis</h4>
-                    <p>Describe your symptoms and get preliminary analysis with recommended actions.</p>
+                    <p>Describe your symptoms and get preliminary analysis</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="feature-card text-center">
-                    <div class="feature-icon">
-                        <i class="fas fa-microphone"></i>
-                    </div>
+                <div class="feature-card text-center" onclick="redirectToAction()">
+                    <div class="feature-icon"><i class="fas fa-microphone-alt"></i></div>
                     <h4>Voice Input</h4>
-                    <p>Speak your symptoms for hands-free interaction and quick assistance.</p>
+                    <p>Speak your symptoms for hands-free assistance</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="feature-card text-center">
-                    <div class="feature-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
+                <div class="feature-card text-center" onclick="redirectToAction()">
+                    <div class="feature-icon"><i class="fas fa-camera"></i></div>
                     <h4>Image Analysis</h4>
-                    <p>Upload medical images for preliminary visual analysis and recommendations.</p>
+                    <p>Upload medical images for visual analysis</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="feature-card text-center">
-                    <div class="feature-icon">
-                        <i class="fas fa-history"></i>
-                    </div>
+                <div class="feature-card text-center" onclick="redirectToAction()">
+                    <div class="feature-icon"><i class="fas fa-history"></i></div>
                     <h4>Medical History</h4>
-                    <p>Track your symptoms, conversations, and medical records securely.</p>
+                    <p>Track symptoms and medical records securely</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Tips -->
-        <div class="row mt-5">
-            <div class="col-md-8 offset-md-2">
-                <div class="feature-card">
-                    <h3 class="text-center mb-4"><i class="fas fa-lightbulb"></i> Quick Tips</h3>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Be specific when describing symptoms</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Mention duration and severity of symptoms</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Upload clear images for better analysis</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Include age and medical history when relevant</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Always consult a doctor for serious symptoms</li>
-                    </ul>
+        <div class="doctor-advice-banner">
+            <i class="fas fa-user-md"></i>
+            <h3>Expert Medical Advice at Your Fingertips</h3>
+            <p>Always consult a healthcare professional for serious conditions. We're here for preliminary guidance.</p>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="tips-section">
+                    <div class="tips-content">
+                        <div class="tips-text">
+                            <h3><i class="fas fa-lightbulb me-2"></i> Smart Tips</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check-circle"></i> Be specific when describing symptoms</li>
+                                        <li><i class="fas fa-check-circle"></i> Mention duration and severity</li>
+                                        <li><i class="fas fa-check-circle"></i> Upload clear images for analysis</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check-circle"></i> Include age and medical history</li>
+                                        <li><i class="fas fa-check-circle"></i> Use voice input for convenience</li>
+                                        <li><i class="fas fa-check-circle"></i> Consult a doctor for serious symptoms</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tips-image">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4222/4222580.png" alt="Doctor Advice">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stats -->
         <div class="row mt-5 text-center">
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-number">24/7</div>
-                    <h5>Availability</h5>
-                    <p>Always available for medical queries</p>
-                </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stat-card"><div class="stat-number">24/7</div><h5>Availability</h5><p>Always available</p></div>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-number">3+</div>
-                    <h5>Languages</h5>
-                    <p>Support for English, Hindi, Tamil</p>
-                </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stat-card"><div class="stat-number">3+</div><h5>Languages</h5><p>English, Hindi, Tamil</p></div>
             </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <h5>Private</h5>
-                    <p>Your data is secure and encrypted</p>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stat-card"><div class="stat-number">100%</div><h5>Privacy</h5><p>Secure & encrypted</p></div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stat-card"><div class="stat-number"><i class="fas fa-brain"></i></div><h5>AI Powered</h5><p>Advanced assistance</p></div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="how-it-works-section">
+                    <h3 class="text-center mb-4"><i class="fas fa-magic me-2"></i> How It Works</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="step-item">
+                                <div class="step-number-badge">1</div>
+                                <div><h5>Describe Symptoms</h5><p class="text-muted">Type or speak your symptoms</p></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="step-item">
+                                <div class="step-number-badge">2</div>
+                                <div><h5>AI Analysis</h5><p class="text-muted">AI analyzes and recommends</p></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="step-item">
+                                <div class="step-number-badge">3</div>
+                                <div><h5>Get Advice</h5><p class="text-muted">Receive medical advice instantly</p></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="mt-5 py-4">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2024 MediCoBot. Your AI Medical Assistant.</p>
-            <p class="text-muted small mt-2">
-                <i class="fas fa-exclamation-triangle text-warning"></i>
-                This is an AI assistant for preliminary guidance only. Always consult a healthcare professional for medical diagnosis.
-            </p>
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt me-1"></i> Privacy Policy</a>
+                <a href="#"><i class="fas fa-file-contract me-1"></i> Terms of Service</a>
+                <a href="#"><i class="fas fa-envelope me-1"></i> Contact Support</a>
+                <a href="#"><i class="fas fa-phone-alt me-1"></i> Emergency Resources</a>
+            </div>
+            <div class="text-center">
+                <p class="mb-0">© HealthMate AI. All rights reserved.</p>
+            </div>
+            <div class="disclaimer text-center">
+                <i class="fas fa-exclamation-triangle text-warning me-1"></i>
+                This is an AI assistant for preliminary guidance only. Always consult a healthcare professional.
+            </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const currentUserIsAuthenticated = {{ 'true' if current_user.is_authenticated else 'false' }};
+        function redirectToAction() {
+            if (currentUserIsAuthenticated) {
+                window.location.href = "/chat";
+            } else {
+                window.location.href = "/register";
+            }
+        }
+    </script>
 </body>
 </html>
